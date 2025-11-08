@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vax Corpus Analysis Presentation v4</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 1. THE SETUP */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f0f4f8; /* Light grey-blue background */
+            display: grid;
+            gap: 20px;
+            grid-template-columns: 1fr;
+            margin: 0;
+            min-height: 100vh;
+            padding: 20px 0;
+            place-items: center;
+        }
+
+        .slide-container {
+            align-items: center;
+            background-color: #ffffff; /* Clean white background */
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 720px;
+            justify-content: center;
+            overflow: hidden;
+            padding: 60px 80px; /* More padding */
+            position: relative;
+            width: 1280px;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+        }
+
+        /* 1.1 BACKGROUND STYLING (Subtle Gradient) */
+        .slide-container::before {
+            content: '';
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(245, 248, 250, 1) 100%);
+        }
+        
+        /* 1.2 FOOTER & SLIDE NUMBER */
+        .slide-container footer {
+            content: 'Vax Corpus Analysis | Polanyi-Based Modeling';
+            position: absolute;
+            bottom: 20px;
+            left: 80px;
+            font-size: 14px;
+            color: #999;
+            z-index: 2;
+        }
+        .slide-container .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 80px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #007acc;
+            z-index: 2;
+        }
+
+
+        .slide-container>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 2. CONSISTENT TYPOGRAPHY */
+
+        /* Headings Font */
+        .slide-container h1,
+        .slide-container h2,
+        .slide-container h3 {
+            color: #1e3a5f; /* Deep corporate blue */
+            font-weight: 700;
+            font-family: 'Roboto Condensed', sans-serif;
+            margin: 0;
+        }
+
+        /* Body Text Font */
+        .slide-container p,
+        .slide-container li,
+        .slide-container .subtitle,
+        .slide-container .text-content,
+        .slide-container code {
+            color: #444; /* Dark grey for readability */
+            font-family: 'Roboto', sans-serif;
+            font-weight: 300;
+        }
+        
+        .slide-container li {
+            margin-bottom: 12px;
+        }
+
+        /* Consistent Font Sizes */
+        .slide-container h1 {
+            font-size: 72px;
+            text-align: center;
+        }
+
+        .slide-container .slide-title {
+            /* This is an h2 */
+            font-size: 44px;
+            font-weight: 700;
+            margin-bottom: 30px; /* Reduced margin */
+            text-align: left;
+            width: 100%;
+            border-bottom: 2px solid #007acc; /* Accent color line */
+            padding-bottom: 15px;
+        }
+
+        .slide-container h3 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #007acc; /* Accent color */
+            margin-bottom: 15px;
+        }
+        
+        .slide-container h4 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin: 10px 0 5px 0;
+        }
+
+        /* Unified body text size */
+        .slide-container p,
+        .slide-container li,
+        .slide-container .subtitle,
+        .slide-container .text-content {
+            font-size: 20px;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .slide-container .subtitle {
+            font-size: 24px;
+            font-weight: 300;
+            margin-top: 20px;
+            text-align: center;
+            color: #555;
+        }
+        
+        .slide-container code {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #eef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 18px;
+            color: #d9006c; /* Pinkish-red for code */
+        }
+        
+        .slide-container .code-block {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+        
+        .slide-container strong {
+            font-weight: 700;
+            color: #1e3a5f;
+        }
+
+        .slide-container .content-area {
+            align-items: flex-start;
+            display: flex;
+            flex-grow: 1;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Allow scrolling if content overflows */
+            padding-bottom: 20px; /* Space for footer */
+        }
+
+        /* 3. LAYOUT DEFINITIONS */
+
+        .title-layout {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .two-column {
+            align-items: flex-start;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            width: 100%;
+        }
+        
+        /* MODIFIED: Added custom grid for slide 2 */
+        .two-column.frame-lock {
+            grid-template-columns: 1.1fr 1.1fr; 
+        }
+        
+        .three-column {
+            align-items: flex-start;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .five-column {
+            align-items: flex-start;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px; /* MODIFIED */
+            width: 100%;
+        }
+        
+        .column-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            height: 100%;
+        }
+        
+        .column-box h3 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        
+        .column-box h4 {
+            font-size: 18px;
+            margin-top: 0;
+            color: #007acc;
+        }
+        
+        .column-box p, .column-box li {
+            font-size: 17px;
+            line-height: 1.5;
+        }
+        
+        .column-box ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+        
+        .column-box li {
+            margin-bottom: 8px;
+        }
+        
+        .column-box code {
+            font-size: 15px;
+        }
+        
+        .cluster-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px; /* MODIFIED */
+            height: 100%;
+            border-top: 4px solid #ccc;
+        }
+        
+        .cluster-box h3 {
+            font-size: 22px; /* MODIFIED */
+            margin-top: 0;
+            margin-bottom: 10px; /* MODIFIED */
+            color: #1e3a5f;
+        }
+        .cluster-box h4 { 
+            font-size: 18px; 
+            font-weight: 700; 
+            color: #333; 
+            margin: 0 0 8px 0;
+        }
+        .cluster-box p, .cluster-box li {
+            font-size: 16px; /* MODIFIED */
+            line-height: 1.4; /* MODIFIED */
+        }
+        .cluster-box ul {
+            padding-left: 20px;
+            list-style-type: '»'; /* Custom bullet */
+            margin-top: 8px; /* MODIFIED */
+        }
+         .cluster-box li {
+            padding-left: 5px; /* MODIFIED */
+            margin-bottom: 5px; /* MODIFIED */
+         }
+        
+        /* Color coding for clusters */
+        .cluster-box.provax { border-top-color: #007acc; }
+        .cluster-box.hesitant { border-top-color: #f59e0b; }
+        .cluster-box.critical { border-top-color: #10b981; }
+        .cluster-box.libertarian { border-top-color: #ef4444; }
+        .cluster-box.conspiratorial { border-top-color: #6366f1; }
+        
+        .cluster-box.provax h3 { color: #007acc; }
+        .cluster-box.hesitant h3 { color: #f59e0b; }
+        .cluster-box.critical h3 { color: #10b981; }
+        .cluster-box.libertarian h3 { color: #ef4444; }
+        .cluster-box.conspiratorial h3 { color: #6366f1; }
+
+        .psyche-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            height: 100%;
+            text-align: center;
+        }
+        .psyche-box h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .psyche-box p {
+            font-size: 17px;
+            font-weight: 700;
+            color: #333;
+        }
+        .psyche-box code {
+            font-size: 16px;
+        }
+
+        
+        /* Neuro slide */
+        .neuro-box {
+            text-align: center;
+            padding: 20px;
+        }
+        .neuro-box h3 {
+            font-size: 28px;
+            color: #d9006c;
+        }
+        .neuro-box h4 {
+            font-size: 22px;
+            color: #1e3a5f;
+            margin-top: 20px;
+        }
+        .neuro-box p {
+            font-size: 18px;
+        }
+        .neuro-box .regions {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e3a5f;
+        }
+        .neuro-box .regions code {
+            font-size: 18px;
+        }
+        
+        .arrow {
+            font-size: 40px;
+            color: #999;
+            align-self: center;
+            text-align: center;
+        }
+        
+        /* Step layout */
+        .step-list {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+            counter-reset: step;
+        }
+        .step-list li {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        .step-list li::before {
+            content: counter(step);
+            counter-increment: step;
+            position: absolute;
+            left: 0;
+            top: -5px;
+            font-size: 36px;
+            font-weight: 700;
+            font-family: 'Roboto Condensed', sans-serif;
+            color: #007acc;
+            background-color: #e6f3ff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            line-height: 40px;
+        }
+        .step-list li strong {
+            color: #1e3a5f;
+            font-weight: 700;
+        }
+        .step-list li code {
+            font-size: 20px;
+        }
+
+        /* NEW: Diagram Layout */
+        .diagram-container {
+            display: grid;
+            grid-template-columns: 1fr 100px 1fr;
+            align-items: center;
+            width: 100%;
+            gap: 20px;
+        }
+        .diagram-box {
+            background-color: #f8fafc;
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            padding: 20px;
+            height: 100%;
+        }
+        .diagram-box h3 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #1e3a5f;
+        }
+        .diagram-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 16px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .diagram-box li {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        .diagram-box .indent {
+            padding-left: 20px;
+        }
+        .diagram-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: #d9006c;
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+        .diagram-arrow i {
+            font-size: 40px;
+            color: #d9006c;
+            margin-bottom: 10px;
+        }
+        
+        .diagram-box.archetype {
+            border-color: #007acc;
+        }
+        .diagram-box.instance {
+            border-color: #10b981;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="slide-container" id="slide1">
+        <div class="title-layout">
+            <h1>From Vax Text to (eXtended) Reality</h1>
+            <p class="subtitle">A Heuristic Knowledge-Based Analysis of the Vaccination Debate and its Neuro-Cognitive Underpinnings</p>
+            <p class="subtitle">Aldo Gangemi and Chiara Lucifora, University of Bologna / ISTC-CNR</p>
+        </div>
+        <footer>Vax Corpus Analysis</footer>
+        <div class="slide-number">1</div>
+    </div>
+
+    <div class="slide-container" id="slide1.1">
+        <h2 class="slide-title">The Starting Point: Vaccination Dataset (Ceolin, 2017)</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <h3>Dataset & Collection</h3>
+                    <ul>
+                        <li>Contains documents about vaccinations.</li>
+                        <li><strong>Source 1:</strong> Web crawl using queries like `measles`, `virus`, `infection`.</li>
+                        <li><strong>Source 2:</strong> Selected from the <code>ControCurator</code> dataset.</li>
+                        <li>Filtered for relevance using keywords like `vaccin` and `inoculation`.</li>
+                    </ul>
+
+                    <h3 style="margin-top: 30px;">Processing & Format</h3>
+                    <ul>
+                        <li>Processed by the <code>NewsReader</code> English NLP pipeline to <code>NAF XML</code> format.</li>
+                        <li>Converted to <code>RDF-TRiG</code> using the <code>EventCoreference</code> module.</li>
+                        <li>Events modeled via <code>GAF-SEM</code>.</li>
+                        <li>Perspectives modeled via <code>GRaSP</code>.</li>
+                    </ul>
+                </div>
+                <div class="column-box" style="border-top: 4px solid #ef4444;">
+                    <h3>The Classic NLP Limitation</h3>
+                    <p>Traditional NLP pipelines struggle with extracting knowledge that relies on more than just explicit features.</p>
+                    <p>This results in a <strong>"sparsity of connected points,"</strong> where the deeper, implicit meaning of the text is lost.</p>
+                    
+                    <h3 style="margin-top: 30px; color: #d9006c;">Our Central Question</h3>
+                    <p style="font-size: 24px; font-weight: 700; color: #1e3a5f; line-height: 1.4;">
+                        How do we overcome this gap and extract the *implicit knowledge* from the text?
+                    </p>
+                </div>
+            </div>
+        </div>
+        <footer>The Dataset & The Problem</footer>
+        <div class="slide-number">0</div>
+    </div>
+
+    <div class="slide-container" id="slide1.2">
+        <h2 class="slide-title">Answering the Question: The Polanyi Method (Theory)</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <h3>Ontology-Driven Neurosymbolic AI</h3>
+                    <p>The "Polanyi" method is our answer. It's an implementation of <strong>ontology-driven neurosymbolic context engineering</strong>.</p>
+                    <p>It's founded on principles designed to extract the very knowledge that classic NLP misses:</p>
+                    <ul>
+                        <li><strong>Pragmatics:</strong> The *intended meaning* and context, not just the literal words.</li>
+                        <li><strong>Tacit Knowledge Extraction:</strong> Making the *implicit* connections *explicit*.</li>
+                        <li><strong>Dynamic Logic:</strong> Modeling how situations and beliefs change.</li>
+                    </ul>
+                    <p>It uses an <strong>agentic approach</strong> to coordinate multiple components: KG processing, heuristics, and problem-solving tasks.</p>
+                </div>
+                <div class="column-box" style="border-top: 4px solid #007acc;">
+                    <h3>"Neurosymbolic Graph Enrichment"</h3>
+                    <p>The method is described in our paper, "Neurosymbolic graph enrichment for Grounded World Models".</p>
+                                        <p><strong>Key capabilities from the research:</strong></p>
+                    <ul>
+                        <li>Combines LLMs with formal knowledge graphs using OWL2.</li>
+                        <li>Enriches the graph with <strong>implicit knowledge</strong> using complex heuristics.</li>
+                        <li>Allows for modeling the very frames we need:
+                            <ul>
+                                <li>`semantic implicatures`</li>
+                                <li>`moral values`</li>
+                                <li>`embodied cognition`</li>
+                                <li>`metaphorical representations`</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <footer>Methodology: The Polanyi Method</footer>
+        <div class="slide-number">1.2</div>
+    </div>
+
+    <div class="slide-container" id="slide1.3">
+        <h2 class="slide-title">The Polanyi Pipeline in Action (Practice)</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <h3>Polanyi Demo Interface</h3>
+                    
+                    <img src="polanyidemo.jpg" alt="The Polanyi demo interface showing the text-to-KG pipeline" style="width: 100%; border: 1px solid #ccc; border-radius: 8px;">
+                    
+                    <p style="font-size: 16px; margin-top: 10px;">The Polanyi tool implements the method as a full pipeline from raw text to an "Extended Knowledge Graph."</p>
+                </div>
+                <div>
+                    <h3>The Enrichment Pipeline</h3>
+                    <ol style="font-size: 18px; line-height: 1.5;">
+                        <li><strong>Text to AMR:</strong> The raw text is parsed into a basic Abstract Meaning Representation (AMR) graph.</li>
+                        <li><strong>AMR to KG:</strong> This graph is converted into a formal RDF/OWL Knowledge Graph.</li>
+                        <li><strong>Heuristic Enrichment:</strong> The "agentic" system applies heuristics (e.g., `b9-IMPACT`) to infer *implicit* tacit knowledge from the base KG.</li>
+                        <li><strong>Extended KG:</strong> The system "back-generates" a final, enriched KG that now includes this new, inferred knowledge.</li>
+                    </ol>
+                    
+                    </div>
+            </div>
+        </div>
+        <footer>Methodology: The Polanyi Pipeline</footer>
+        <div class="slide-number">1.3</div>
+    </div>
+
+    <div class="slide-container" id="slide2">
+        <h2 class="slide-title">The Challenge: A Neuro-Cognitive "Frame-Lock"</h2>
+        <div class="content-area">
+            <div class="two-column frame-lock">
+                <div class="column-box" style="border-top: 4px solid #007acc;">
+                    <h3>"COLD" AXIS (Rational / Utilitarian)</h3>
+                    <p>Presents arguments based on data, utility, and community benefit. This is a plausible <strong>`neuro:dlPFC`</strong> (Dorsolateral Prefrontal Cortex) dominant function.</p>
+                    <ul>
+                        <li><strong>Clusters:</strong> `Provax`, `Critical`</li>
+                        <li><strong>Frames:</strong> `mor:PublicGood`, `mor:Utility`, `pbrs:protect-01`</li>
+                        <li><strong>Argument:</strong> "Here is the data. Let's weigh the options."</li>
+                    </ul>
+                </div>
+                <div class="column-box" style="border-top: 4px solid #ef4444;">
+                    <h3>"HOT" AXIS (Emotional / Personal)</h3>
+                    <p>Hears arguments through a filter of threat, fear, or identity. This is a plausible <strong>`neuro:Amygdala`</strong> (threat detection) dominant function.</p>
+                    <ul>
+                        <li><strong>Clusters:</strong> `Hesitant`, `Antivax`</li>
+                        <li><strong>Frames:</strong> `emo:Fear`, `mor:Liberty`, `pbrs:lie-01`</li>
+                        <li><strong>Argument:</strong> "I am scared," "You are forcing me," or "You are lying."</li>
+                    </ul>
+                </div>
+            </div>
+            <p style="width: 100%; text-align: center; margin-top: 30px; font-size: 24px;"><strong>Problem:</strong> "Hot" frames are "locked"; they hear "Cold" arguments and re-frame them as threats. The `Amygdala` hijacks the `dlPFC`.</p>
+        </div>
+        <footer>The Core Challenge</footer>
+        <div class="slide-number">2</div>
+    </div>    </div>
+
+    <div class="slide-container" id="slide3">
+        <h2 class="slide-title">Our 5-Step Methodology</h2>
+        <div class="content-area">
+            <ol class="step-list">
+                <li><strong>Knowledge extraction</strong> (File: <code>vaccinepolanyiextendedgraph.ttl</code>)<br>
+                    Example: used Polanyi-based AI to create a Knowledge Graph (KG) of a sample `Provax` argument, modeling its intent, strategies, and frames.</li>
+                <li><strong>Cluster</strong> (File: <code>vaccinationontologybasis.txt</code>)<br>
+                    Analyzed 250-text corpus to identify 5 core attitudinal clusters based on Polanyi heuristics.</li>
+                <li><strong>Ontology generation</strong> (Files: <code>vaxattitude.ttl</code>, <code>vaccinedisputatiokg.ttl</code>)<br>
+                    Built a formal OWL ontology to define clusters (Part 1) and their conflicts (Part 2).</li>
+                <li><strong>Map</strong> (File: <code>vaccinedisputatiokg-neuro-ext.ttl</code>)<br>
+                    Mapped each cluster's Active Inference model to plausible neural activations (<code>b20-NEURO</code>) and established psychological profiles.</li>
+                <li><strong>Apply</strong> (Files: <code>vaccinevrscenario.txt</code>, <code>vr-scenario.ttl</code>)<br>
+                    Designed a VR scenario based *directly* on the formalized knowledge to induce "perspectival thinking."</li>
+            </ol>
+        </div>
+        <footer>Methodology</footer>
+        <div class="slide-number">3</div>
+    </div>
+
+    <div class="slide-container" id="slide4">
+        <h2 class="slide-title">Step 1: Knowledge Extraction (The "Provax" Example)</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <h3>Original Text (`polanyi:text_1`)</h3>
+                    <p style="font-size: 18px; font-style: italic; line-height: 1.5;">"In this video, a family physician explains his decision, as a doctor and a parent, to make sure each of his children received HPV vaccine at age 11 or 12. HPV vaccine is cancer prevention. Ask about it for your child."</p>
+                    <h3 style="margin-top: 20px;">Base Graph Extraction (B)</h3>
+                    <p>AI extracts core frames and entities:</p>
+                    <ul style="font-size: 18px; line-height: 1.5;">
+                        <li><code>fred:physician_1</code> a <code>fred:FamilyPhysician</code></li>
+                        <li><code>fred:explain_1</code> a <code>pbrs:explain-01</code></li>
+                        <li><code>fred:decide_1</code> a <code>pbrs:decide-01</code></li>
+                        <li><code>fred:prevent_1</code> a <code>pbrs:prevent-01</code></li>
+                        <li><code>fred:prevent_1 pblr:instrument fred:vaccine_2</code></li>
+                        <li><code>fred:prevent_1 pblr:theme fred:cancer_1</code></li>
+                    </ul>
+                </div>
+                <div class="column-box" style="border-top: 4px solid #007acc;">
+                    <h3>Heuristic Extension (H)</h3>
+                    <p>The AI applies Polanyi heuristics to infer deeper meaning, intent, and argumentation.</p>
+                    <ul style="font-size: 17px; line-height: 1.5;">
+                        <li><strong>`b7-COERCION` (Metonymy):</strong>
+                            <br><code>"vaccine is prevention"</code>
+                            <br>...is a <code>polanyi:InstrumentForProcess</code>.</li>
+                        <li><strong>`b9-CAUSALITY` (Causality):</strong>
+                            <br><code>fred:receive_1 caus:causes fred:prevent_1</code>.</li>
+                        <li><strong>`b12-PERSPECTIVE` (Perspective):</strong>
+                            <br><code>polanyi:DoctorPerspective persp:alignsWith polanyi:ParentPerspective</code>.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <footer>Step 1: Knowledge Extraction</footer>
+        <div class="slide-number">4</div>
+    </div>
+    
+    <div class="slide-container" id="slide5">
+        <h2 class="slide-title">Step 1 (cont.): Modeling Intent & Task (T, M)</h2>
+        <div class="content-area">
+            <div style="width: 100%;">
+                <p>Finally, the AI models the author's <strong>Task (T)</strong> and generative <strong>Method (M)</strong> to complete the Knowledge Graph.</p>
+                <div class="two-column">
+                    <div class="column-box" style="border-top: 4px solid #6366f1;">
+                        <h3>Task (T): Argumentation</h3>
+                        <p>Models the <code>disputatio</code> (argument).</p>
+                        <ul>
+                            <li><code>polanyi:AuthorIntention intent:hasGoal polanyi:Goal_PromoteVaccination .</code></li>
+                            <li><code>polanyi:Arg_AuthorIntent disputatio:usesEvidence polanyi:Evid_Authority .</code></li>
+                            <li><code>polanyi:Arg_AuthorIntent disputatio:usesEvidence polanyi:Evid_Fact .</code></li>
+                            <li><code>polanyi:CallToAction disputatio:leadsTo fred:ask_1 .</code></li>
+                        </ul>
+                    </div>
+                    <div class="column-box" style="border-top: 4px solid #10b981;">
+                        <h3>Method (M6): Active Inference</h3>
+                        <p>Models the *why* of the argument.</p>
+                        <ul>
+                            <li><code>polanyi:AuthorModel actinf:hasPriorBelief "Audience is uncertain."</code></li>
+                            <li><code>polanyi:text_1 actinf:implements polanyi:ArgumentPolicy .</code></li>
+                            <li><code>polanyi:ArgumentPolicy actinf:aimsToMinimize polanyi:AudienceUncertainty_PredictionError .</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>Step 1: Modeling Intent</footer>
+        <div class="slide-number">5</div>
+    </div>
+
+    <div class="slide-container" id="slide6">
+        <h2 class="slide-title">Step 2: The 5 Attitudinal Clusters</h2>
+        <div class="content-area">
+            <div class="five-column">
+                <div class="cluster-box provax">
+                    <h3>1. Provax</h3>
+                    <h4>"Authority & Protection"</h4>
+                    <p>Recommends vaccination based on authority and community benefit.</p>
+                    <ul>
+                        <li>`mor:PublicGood`</li>
+                        <li>`pbrs:protect-01`</li>
+                        <li>`emo:Trust`</li>
+                    </ul>
+                </div>
+                <div class="cluster-box hesitant">
+                    <h3>2. Hesitant</h3>
+                    <h4>"Fear & Uncertainty"</h4>
+                    <p>Expresses personal fear of side effects and unknowns. Driven by anxiety, not politics.</p>
+                    <ul>
+                        <li>`emo:Fear`</li>
+                        <li>`pbrs:risk-01`</li>
+                        <li>`blend:VaccineAsUnknown`</li>
+                    </ul>
+                </div>
+                <div class="cluster-box critical">
+                    <h3>3. Critical</h3>
+                    <h4>"Balance & Utility"</h4>
+                    <p>Attempts a balanced, "cold" analysis of trade-offs, fairness, and utility.</p>
+                    <ul>
+                        <li>`pbrs:weigh-01`</li>
+                        <li>`mor:Fairness`</li>
+                        <li>`emo:Neutrality`</li>
+                    </ul>
+                </div>
+                <div class="cluster-box libertarian">
+                    <h3>4. Antivax (Libertarian)</h3>
+                    <h4>"Liberty & Antagonism"</h4>
+                    <p>Political opposition. Reframes the debate from *safety* to *morality*.</p>
+                    <ul>
+                        <li>`mor:Liberty`</li>
+                        <li>`pbrs:force-01`</li>
+                        <li>`blend:MandateAsTyranny`</li>
+                    </ul>
+                </div>
+                <div class="cluster-box conspiratorial">
+                    <h3>5. Antivax (Conspiratorial)</h3>
+                    <h4>"Secrecy & Malice"</h4>
+                    <p>Rejects arguments as lies, positing a secret, malicious goal.</p>
+                    <ul>
+                        <li>`pbrs:lie-01`</li>
+                        <li>`emo:Distrust`</li>
+                        <li>`intent:Goal_TotalControl_1`</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <footer>Step 2: Clustering</footer>
+        <div class="slide-number">6</div>
+    </div>
+
+    <div class="slide-container" id="slide7-new">
+        <h2 class="slide-title">Step 3 (Part 1): The Attitude Ontology (vaxattitude.ttl)</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <h3>Core Concepts</h3>
+                    <p>The ontology defines the 5 clusters as subclasses of <strong><code>vax:VaccinationAttitude</code></strong>, which is a type of <strong><code>dul:Situation</code></strong>.</p>
+                    <p>Each attitude is *defined by* the collection of frames it uses, connected by the <strong><code>vax:usesFrame</code></strong> property and its sub-properties:</p>
+                                        <ul style="font-size: 18px; line-height: 1.5;">
+                        <li><strong><code>vax:ConceptualFrame</code></strong> (e.g., <code>pbrs:protect-01</code>)</li>
+                        <li><strong><code>vax:EmotionalFrame</code></strong> (e.g., <code>emo:Trust</code>)</li>
+                        <li><strong><code>vax:MoralFrame</code></strong> (e.g., <code>mor:PublicGood</code>)</li>
+                        <li><strong><code>vax:MetaphoricalFrame</code></strong> (e.g., <code>blend:VaccineAsShield</code>)</li>
+                    </ul>
+                </div>
+                <div class="column-box">
+                    <h3 style="font-size: 22px; margin-bottom: 10px;">Example: <code>vax:ProvaxAttitude</code></h3>
+                    <div class="code-block" style="padding: 15px;">
+<pre style="font-size: 13.5px; line-height: 1.45; margin: 0; white-space: pre-wrap;">
+vax:ProvaxAttitude rdf:type owl:Class ;
+  rdfs:subClassOf vax:VaccinationAttitude ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty vax:usesConceptualFrame ;
+      owl:someValuesFrom pbrs:protect-01
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty vax:usesMoralFrame ;
+      owl:someValuesFrom mor:PublicGood
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty vax:usesEmotionalFrame ;
+      owl:someValuesFrom emo:Trust
+    ] ,
+    [ rdf:type owl:Restriction ;
+      owl:onProperty vax:usesMetaphoricalFrame ;
+      owl:someValuesFrom blend:VaccineAsShield
+    ] ;
+  rdfs:comment "Stance defined by frames of... 
+  protection, public good, and trust."
+</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>Step 3: The Attitude Ontology</footer>
+        <div class="slide-number">7</div>
+    </div>
+    
+    <div class="slide-container" id="slide7">
+        <h2 class="slide-title">Step 4 Deep Dive: Provax</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <h3>Argument (Step 1) & Frames (Step 2)</h3>
+                    <p>Argument from Authority ("A doctor *and* parent trusts it...") and Fact ("...it's cancer prevention").</p>
+                    <h3>Key Frames (from Step 3 Ontology)</h3>
+                    <ul>
+                        <li><strong>Conceptual:</strong> <code>pbrs:recommend-01</code>, <code>pbrs:protect-01</code></li>
+                        <li><strong>Moral:</strong> <code>mor:PublicGood</code></li>
+                        <li><strong>Emotional:</strong> <code>emo:Trust</code></li>
+                    </ul>
+                    <h3>KG Example (Step 1)</h3>
+                    <ul>
+                        <li><code>polanyi:Arg_AuthorIntent disputatio:usesEvidence polanyi:Evid_Authority .</code></li>
+                        <li><code>intent:hasGoal polanyi:Goal_PromoteVaccination .</code></li>
+                    </ul>
+                </div>
+                <div class="column-box provax">
+                    <h3>Neuro-Cognitive Model (Step 4 Map)</h3>
+                    <p>Based on <code>vaccinedisputatiokg-neuro-ext.ttl</code></p>
+                    <ul>
+                        <li><strong>Generative Model:</strong> <code>:Provax_GenModel</code></li>
+                        <li><strong>Aims to Minimize:</strong> <code>:SocialHarm_PredictionError</code></li>
+                        <li><strong>Plausible Activation:</strong> <code>:Provax_Activation</code></li>
+                        <li><strong>Regions (`neuro:involvesRegion`):</strong>
+                            <ul>
+                                <li><code>neuro:dlPFC</code> (Cold Cognition, Planning)</li>
+                                <li><code>neuro:vmPFC</code> (Value Integration, Trust)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <footer>Step 4 Deep Dive: Provax</footer>
+        <div class="slide-number">8</div>
+    </div>
+
+    <div class="slide-container" id="slide8">
+        <h2 class="slide-title">Step 4 Deep Dive: Hesitant</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <h3>Argument & Frames (Step 2)</h3>
+                    <p>Argument from Personal Fear. Rejects authority in favor of personal anxiety and perceived risk.</p>
+                    <h3>Key Frames (from Step 3 Ontology)</h3>
+                    <ul>
+                        <li><strong>Conceptual:</strong> <code>pbrs:fear-01</code>, <code>pbrs:risk-01</code></li>
+                        <li><strong>Moral:</strong> <code>mor:Purity</code>, <code>mor:Care</code> (for self)</li>
+                        <li><strong>Emotional:</strong> <code>emo:Fear</code>, <code>emo:Anxiety</code></li>
+                    </ul>
+                    <h3>KG Example (Disputatio)</h3>
+                    <ul>
+                        <li><code>:ChallengerAttitude_Hesitant vax:usesEmotionalFrame emo:Fear .</code></li>
+                        <li><code>:Hesitant_Argument disputatio:hasRespondeo "...your authority does not calm my personal fear."</code></li>
+                    </ul>
+                </div>
+                <div class="column-box hesitant">
+                    <h3>Neuro-Cognitive Model (Step 4 Map)</h3>
+                    <p>Based on <code>vaccinedisputatiokg-neuro-ext.ttl</code></p>
+                    <ul>
+                        <li><strong>Generative Model:</strong> <code>:Hesitant_GenModel</code></li>
+                        <li><strong>Aims to Minimize:</strong> <code>:PersonalHarm_PredictionError</code></li>
+                        <li><strong>Plausible Activation:</strong> <code>:Hesitant_Activation</code></li>
+                        <li><strong>Regions (`neuro:involvesRegion`):</strong>
+                            <ul>
+                                <li><code>neuro:Amygdala</code> (Threat, Fear)</li>
+                                <li><code>neuro:Insula</code> (Anxiety, Interoception)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <footer>Step 4 Deep Dive: Hesitant</footer>
+        <div class="slide-number">9</div>
+    </div>
+
+    <div class="slide-container" id="slide9">
+        <h2 class="slide-title">Step 4 Deep Dive: Critical</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <h3>Argument & Frames (Step 2)</h3>
+                    <p>Argument from Utility/Balance. Seeks to weigh all factors (health, economy, liberty) without a strong "hot" bias.</p>
+                    <h3>Key Frames (from Step 3 Ontology)</h3>
+                    <ul>
+                        <li><strong>Conceptual:</strong> <code>pbrs:weigh-01</code>, <code>pbrs:balance-01</code></li>
+                        <li><strong>Moral:</strong> <code>mor:Fairness</code>, <code>mor:Utility</code></li>
+                        <li><strong>Emotional:</strong> <code>emo:Neutrality</code></li>
+                    </ul>
+                    <h3>KG Example (Disputatio)</h3>
+                    <ul>
+                        <li><code>:ChallengerAttitude_Critical vax:usesConceptualFrame pbrs:weigh-01 .</code></li>
+                        <li><code>:Critical_Argument disputatio:hasRespondeo "...ignores cost-benefit, utility, and fairness."</code></li>
+                    </ul>
+                </div>
+                <div class="column-box critical">
+                    <h3>Neuro-Cognitive Model (Step 4 Map)</h3>
+                    <p>Based on <code>vaccinedisputatiokg-neuro-ext.ttl</code></p>
+                    <ul>
+                        <li><strong>Generative Model:</strong> <code>:Critical_GenModel</code></li>
+                        <li><strong>Aims to Minimize:</strong> <code>:OverallUtility_PredictionError</code></li>
+                        <li><strong>Plausible Activation:</strong> <code>:Critical_Activation</code></li>
+                        <li><strong>Regions (`neuro:involvesRegion`):</strong>
+                            <ul>
+                                <li><code>neuro:dlPFC</code> (Cold Cognition, Planning)</li>
+                                <li><code>neuro:TPJ</code> (Perspective-Taking, Fairness)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <footer>Step 4 Deep Dive: Critical</footer>
+        <div class="slide-number">10</div>
+    </div>
+
+    <div class="slide-container" id="slide10">
+        <h2 class="slide-title">Step 4 Deep Dive: Antivax-Libertarian</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <h3>Argument & Frames (Step 2)</h3>
+                    <p>Argument from Principle (Liberty). Reframes the *question* from safety to morality and political rights.</p>
+                    <h3>Key Frames (from Step 3 Ontology)</h3>
+                    <ul>
+                        <li><strong>Conceptual:</strong> <code>pbrs:force-01</code>, <code>pbrs:violate-01</code></li>
+                        <li><strong>Moral:</strong> <code>mor:Liberty</code>, <code>mor:Autonomy</code> (as a sacred value)</li>
+                        <li><strong>Emotional:</strong> <code>emo:Anger</code>, <code>emo:Contempt</code></li>
+                    </ul>
+                    <h3>KG Example (Disputatio)</h3>
+                    <ul>
+                        <li><code>:Libertarian_Argument disputatio:hasQuaestio "Is the *mandate* moral?"</code></li>
+                        <li><code>:ChallengerAttitude_Libertarian vax:usesMetaphoricalFrame blend:MandateAsTyranny .</code></li>
+                    </ul>
+                </div>
+                <div class="column-box libertarian">
+                    <h3>Neuro-Cognitive Model (Step 4 Map)</h3>
+                    <p>Based on <code>vaccinedisputatiokg-neuro-ext.ttl</code></p>
+                    <ul>
+                        <li><strong>Generative Model:</strong> <code>:Libertarian_GenModel</code></li>
+                        <li><strong>Aims to Minimize:</strong> <code>:AutonomyViolation_PredictionError</code></li>
+                        <li><strong>Plausible Activation:</strong> <code>:Libertarian_Activation</code></li>
+                        <li><strong>Regions (`neuro:involvesRegion`):</strong>
+                            <ul>
+                                <li><code>neuro:Amygdala</code> (Social Threat, Anger)</li>
+                                <li><code>neuro:vmPFC</code> (Sacred Value Violation)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <footer>Step 4 Deep Dive: Libertarian</footer>
+        <div class="slide-number">11</div>
+    </div>
+
+    <div class="slide-container" id="slide11">
+        <h2 class="slide-title">Step 4 Deep Dive: Antivax-Conspiratorial</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <h3>Argument & Frames (Step 2)</h3>
+                    <p>Argument from Secret Knowledge. Rejects the opponent's stated *intent* as a deliberate deception.</p>
+                    <h3>Key Frames (from Step 3 Ontology)</h3>
+                    <ul>
+                        <li><strong>Conceptual:</strong> <code>pbrs:lie-01</code>, <code>pbrs:hide-01</code></li>
+                        <li><strong>Moral:</strong> (Replaced by) <code>emo:Distrust</code></li>
+                        <li><strong>Intent:</strong> <code>intent:Goal_TotalControl_1</code></li>
+                    </ul>
+                    <h3>KG Example (Disputatio)</h3>
+                    <ul>
+                        <li><code>:Conspiratorial_Argument disputatio:hasRespondeo "...The author is lying..."</code></li>
+                        <li><code>:ChallengerAttitude_Conspiratorial vax:usesFrame intent:Goal_TotalControl_1 .</code></li>
+                    </ul>
+                </div>
+                <div class="column-box conspiratorial">
+                    <h3>Neuro-Cognitive Model (Step 4 Map)</h3>
+                    <p>Based on <code>vaccinedisputatiokg-neuro-ext.ttl</code></p>
+                    <ul>
+                        <li><strong>Generative Model:</strong> <code>:Conspiratorial_GenModel</code></li>
+                        <li><strong>Aims to Minimize:</strong> <code>:Deception_PredictionError</code></li>
+                        <li><strong>Plausible Activation:</strong> <code>:Conspiratorial_Activation</code></li>
+                        <li><strong>Regions (`neuro:involvesRegion`):</strong>
+                            <ul>
+                                <li><code>neuro:Amygdala</code> (High Threat, Distrust)</li>
+                                <li><code>neuro:DMN</code> (Default Mode Network, Alternative Narrative)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <footer>Step 4 Deep Dive: Conspiratorial</footer>
+        <div class="slide-number">12</div>
+    </div>
+    
+    <div class="slide-container" id="slide12">
+        <h2 class="slide-title">From Instance to Archetype: The "Provax" Example</h2>
+        <div class="content-area">
+            <div class="diagram-container">
+                <div class="diagram-box archetype">
+                    <h3>`vax:ProvaxAttitude` Cluster (Step 3)</h3>
+                    <ul>
+                        <li><strong><code>mor:PublicGood</code></strong></li>
+                        <li><strong><code>pbrs:protect-01</code></strong></li>
+                        <li><strong><code>blend:VaccineAsShield</code></strong></li>
+                        <li><strong><code>emo:Trust</code></strong></li>
+                    </ul>
+                </div>
+                
+                <div class="diagram-arrow">
+                    <i class="fa-solid fa-arrow-right-long"></i>
+                    <span>realizes</span>
+                </div>
+                
+                <div class="diagram-box instance">
+                    <h3>`polanyi:text_1` KG Instance (Step 1)</h3>
+                    <ul>
+                        <li><code>polanyi:Evid_Authority</code></li>
+                        <li class="indent"><code>disputatio:evidenceSource</code>
+                            <ul class="indent">
+                                <li><code>fred:decide_1</code>
+                                    <ul class="indent">
+                                        <li><code>pblr:decider fred:physician_1</code></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><code>fred:prevent_1</code>
+                            <ul class="indent">
+                                <li><code>pblr:instrument fred:vaccine_1</code></li>
+                                <li><code>pblr:theme fred:cancer_1</code></li>
+                            </ul>
+                        </li>
+                        <li><code>polanyi:Evid_Fact</code></li>
+                        <li><code>impact:hasExpectedEmotionalImpact emo:Trust</code></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <footer>Step 1-3: Instance vs. Archetype</footer>
+        <div class="slide-number">13</div>
+    </div>
+    
+    <div class="slide-container" id="slide13">
+        <h2 class="slide-title">Explanation: How the Instance "Realizes" the Archetype</h2>
+        <div class="content-area">
+            <div style="width: 100%;">
+                <p>The Knowledge Graph on the right is a detailed "ground-truth" example of *how* a text performs the attitude defined by the abstract cluster on the left.</p>
+                <ul style="font-size: 18px; line-height: 1.5;">
+                    <li>
+                        <strong><code>mor:PublicGood / emo:Trust</code></strong>
+                        <br>The cluster's abstract need for <code>Authority/Trust</code> is *realized* by <code>polanyi:Evid_Authority</code>, which points to the <code>fred:decide_1</code> action being performed by <code>fred:physician_1</code>.
+                    </li>
+                    <li>
+                        <strong><code>pbrs:protect-01</code></strong>
+                        <br>The cluster's <code>protect-01</code> frame is *realized* by the specific <code>fred:prevent_1</code> event, which has its own semantic roles: <code>pblr:instrument fred:vaccine_1</code> and <code>pblr:theme fred:cancer_1</code>.
+                    </li>
+                    <li>
+                        <strong><code>blend:VaccineAsShield</code></strong>
+                        <br>The cluster's <code>VaccineAsShield</code> metaphor is *realized* by <code>polanyi:Evid_Fact</code>, which directly equates the <code>fred:vaccine_1</code> (the tool) with <code>fred:prevent_1</code> (the action).
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <footer>Step 1-3: Instance vs. Archetype</footer>
+        <div class="slide-number">14</div>
+    </div>
+
+    <div class="slide-container" id="slide14">
+        <h2 class="slide-title">Step 4 (Finding): Neural Data *Reinforces* the Clusters</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div class="neuro-box">
+                    <h3>"COLD" CLUSTERS</h3>
+                    <p>(dlPFC-Dominant)</p>
+                    <h4>Provax</h4>
+                    <p class="regions"><code>dlPFC</code> + <code>vmPFC</code><br>(Rational planning + Pro-social value)</p>
+                    <h4>Critical</h4>
+                    <p class="regions"><code>dlPFC</code> + <code>TPJ</code><br>(Rational planning + Perspective-taking)</p>
+                    <p style="margin-top: 20px;"><strong>Language:</strong> "Here is the data. Let's weigh the options."</p>
+                </div>
+                <div class="neuro-box">
+                    <h3>"HOT" CLUSTERS</h3>
+                    <p>(Amygdala-Dominant)</p>
+                    <h4>Hesitant</h4>
+                    <p class="regions"><code>Amygdala</code> + <code>Insula</code><br>(Fear + Anxiety about harm)</p>
+                    <h4>Antivax-Libertarian</h4>
+                    <p class="regions"><code>Amygdala</code> + <code>vmPFC</code><br>(Threat + Sacred value violation)</p>
+                    <h4>Antivax-Conspiratorial</h4>
+                    <p class="regions"><code>Amygdala</code> + <code>DMN</code><br>(Threat + Alternative self-story)</p>
+                    <p style="margin-top: 20px;"><strong>Language:</strong> "I feel threatened. This is wrong."</p>
+                </div>
+            </div>
+            <p style="width: 100%; text-align: center; margin-top: 20px; font-size: 22px;"><strong>Insight:</strong> The clusters are not revised; they are *explained*. "Cold" clusters argue with the <code>dlPFC</code>, but "Hot" clusters *listen* with the <code>Amygdala</code>.</p>
+        </div>
+        <footer>Step 4: Neural Mapping</footer>
+        <div class="slide-number">15</div>
+    </div>
+
+    <div class="slide-container" id="slide15">
+        <h2 class="slide-title">Step 4 (cont.): From Neural Signature to Psychological Profile</h2>
+        <div class="content-area">
+            <div class="five-column">
+                <div class="psyche-box cluster-box provax">
+                    <h3>Provax</h3>
+                    <p>Cognitive Style: High Authoritarianism (RWA) & Pro-social trust.</p>
+                    <code>dlPFC + vmPFC</code>
+                </div>
+                <div class="psyche-box cluster-box hesitant">
+                    <h3>Hesitant</h3>
+                    <p>Profile: Anxiety Disorders & Disgust Sensitivity.</p>
+                    <code>Amygdala + Insula</code>
+                </div>
+                <div class="psyche-box cluster-box critical">
+                    <h3>Critical</h3>
+                    <p>Cognitive Style: High Need for Cognition (NFC).</p>
+                    <code>dlPFC + TPJ</code>
+                </div>
+                <div class="psyche-box cluster-box libertarian">
+                    <h3>Antivax-Libertarian</h3>
+                    <p>Profile: Psychological Reactance & ODD traits.</p>
+                    <code>Amygdala + vmPFC</code>
+                </div>
+                <div class="psyche-box cluster-box conspiratorial">
+                    <h3>Antivax-Conspiratorial</h3>
+                    <p>Profile: Schizotypy / Paranoid Traits.</p>
+                    <code>Amygdala + DMN</code>
+                </div>
+            </div>
+             <p style="width: 100%; text-align: center; margin-top: 30px; font-size: 24px;"><strong>Conclusion:</strong> We aren't arguing against a *position*, but against a *profile*. You can't logic (<code>dlPFC</code>) someone out of a position held by anxiety (<code>Insula</code>) or reactance (<code>Amygdala</code>).</p>
+        </div>
+        <footer>Step 4: Psychological Profiles</footer>
+        <div class="slide-number">16</div>
+    </div>
+
+    <div class="slide-container" id="slide16">
+        <h2 class="slide-title">Step 3 (Part 2): Formalizing the *Disputatio*</h2>
+        <div class="content-area">
+            <div style="width: 100%;">
+                <p>We can't just list frames; we must model the *conflict*.</p>
+                <p>We used the <code>vaxattitude.ttl</code> ontology to build a Knowledge Graph (<code>vaccinedisputatiokg.ttl</code>) of the debate. This KG formalizes *how* the challenger clusters (from <code>vaccinedisputatio.md</code>) attack the central <code>Provax</code> argument.</p>
+                
+                <div class="three-column" style="margin-top: 30px; align-items: center;">
+                    <div class="column-box" style="text-align: center;">
+                        <h3>CHALLENGERS</h3>
+                        <p><code>kg:ChallengerAttitude_Hesitant</code><br>
+                           <code>kg:ChallengerAttitude_Critical</code><br>
+                           <code>kg:ChallengerAttitude_Libertarian</code><br>
+                           <code>kg:ChallengerAttitude_Conspiratorial</code></p>
+                    </div>
+                    <div class="arrow">
+                        <i class="fa-solid fa-right-left"></i>
+                        <p style="font-size: 16px; margin-top: 5px;"><code>disputatio:challenges</code></p>
+                    </div>
+                    <div class="column-box provax" style="text-align: center;">
+                        <h3>CENTRAL ARGUMENT</h3>
+                        <p><code>kg:AuthorAttitude_Provax</code></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>Step 3: Formalizing Conflict</footer>
+        <div class="slide-number">17</div>
+    </div>
+
+    <div class="slide-container" id="slide17">
+        <h2 class="slide-title">Step 5: Application - A VR Scenario</h2>
+        <div class="content-area">
+            <div style="width: 100%;">
+                <p><strong>Goal:</strong> Not to "convert," but to foster the balanced <strong><code>vax:CriticalAttitude</code></strong> (the <code>dlPFC</code> + <code>TPJ</code> state).</p>
+                <p><strong>Premise</strong> (from <code>vaccinevrscenario.txt</code>):</p>
+                <ul>
+                    <li>The user plays a <strong>Public Health Director</strong> for a small town.</li>
+                    <li>They must manage two competing meters: <code>vrs:PublicHealthMeter</code> and <code>vrs:PublicTrustMeter</code>.</li>
+                </ul>
+                <h3>The Mechanism: <i>Disputatio ad utrumque partem</i></h3>
+                <ol>
+                    <li>The user's <strong>policy choice</strong> (e.g., "Institute Mandate") is their <strong>Argument</strong>.</li>
+                    <li>The VR avatars (representing the clusters) confront the user with the <strong>Embodied Counterargument</strong> (from Step 3, Part 2).</li>
+                    <li>The user is forced to experience the consequences of their own "frame-locked" decision.</li>
+                </ol>
+            </div>
+        </div>
+        <footer>Step 5: VR Application</footer>
+        <div class="slide-number">18</div>
+    </div>
+
+    <div class="slide-container" id="slide18">
+        <h2 class="slide-title">VR Scenario: The "Hot" vs. "Cold" Zones</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div class="column-box" style="border-top: 4px solid #007acc;">
+                    <h3>1. The "Mayor's Office" (Cold Zone)</h3>
+                    <p>Rational, data-driven. User sees dashboards and stats. This zone is designed to engage the <strong>`neuro:dlPFC`</strong> (from Step 4).</p>
+                    <ul>
+                        <li><strong>Cognitive Axis:</strong> <code>vrs:ColdCognition</code></li>
+                        <li><strong>Engages Frames:</strong> `mor:PublicGood`, `mor:Utility`</li>
+                        <li><strong>Avatars:</strong> "CDC Advisor" (<code>Provax</code>), "Town Economist" (<code>Critical</code>)</li>
+                    </ul>
+                </div>
+                <div class="column-box" style="border-top: 4px solid #ef4444;">
+                    <h3>2. "The Street" (Hot Zone)</h3>
+                    <p>Emotional, personal, conflict. User faces citizens. This zone is designed to engage the <strong>`neuro:Amygdala`</strong> (from Step 4).</p>
+                    <ul>
+                        <li><strong>Cognitive Axis:</strong> <code>vrs:HotCognition</code></li>
+                        <li><strong>Engages Frames:</strong> `mor:Care`, `mor:Liberty`, `emo:Fear`</li>
+                        <li><strong>Avatars:</strong> "Hesitant Parent," "Business Owner" (<code>Libertarian</code>)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <footer>Step 5: VR Scenario Design</footer>
+        <div class="slide-number">19</div>
+    </div>
+
+    <div class="slide-container" id="slide19">
+        <h2 class="slide-title">VR Example: Branch 1 ("Provax" Policy)</h2>
+        <div class="content-area">
+            <div style="width: 100%;">
+                <h3>1. User's Policy (Cold Zone) <i class="fa-solid fa-user" style="color:#007acc;"></i></h3>
+                <p>Institutes a town-wide mandate. Argument is based on <code>mor:PublicGood</code> and <code>pbrs:protect-01</code>. (This is <code>vrs:UserPolicy :ProvaxPolicyChoice</code>).</p>
+                
+                <h3 style="margin-top: 30px;">2. Embodied Counterarguments (Hot Zone) <i class="fa-solid fa-users" style="color:#ef4444;"></i></h3>
+                <p>User walks "The Street" and is confronted by...</p>
+                <div class="two-column">
+                    <div class="cluster-box libertarian">
+                        <p><strong>Libertarian Avatar:</strong> "This is <code>blend:MandateAsTyranny</code>! You <code>pbrs:force-01</code> me!"<br>
+                        (Presents <code>kg:Libertarian_Argument</code>)</p>
+                    </div>
+                    <div class="cluster-box hesitant">
+                        <p><strong>Hesitant Avatar:</strong> "I'm scared (<code>emo:Fear</code>). You're forcing me to take a <code>pbrs:risk-01</code>!"<br>
+                        (Presents <code>kg:Hesitant_Argument</code>)</p>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px;">3. Insight (`vrs:LearningOutcome`) <i class="fa-solid fa-brain" style="color:#10b981;"></i></h3>
+                <p>The "rational" <code>dlPFC</code> policy is not heard by the "Hot" <code>Amygdala</code> frames. The user *experiences* the "frame-lock."<br>
+                <strong>Result: <code>vrs:PublicTrustMeter</code> collapses.</strong></p>
+            </div>
+        </div>
+        <footer>Step 5: VR Branch 1</footer>
+        <div class="slide-number">20</div>
+    </div>
+    
+    <div class="slide-container" id="slide20">
+        <h2 class="slide-title">VR Example: Branch 2 ("Liberty" Policy)</h2>
+        <div class="content-area">
+            <div style="width: 100%;">
+                <h3>1. User's Policy (Cold Zone) <i class="fa-solid fa-user" style="color:#ef4444;"></i></h3>
+                <p>Institutes a "100% personal choice" policy. Argument is based on <code>mor:Liberty</code> and <code>pbrs:choose-01</code>. (This is <code>vrs:UserPolicy :AntivaxPolicyChoice</code>).</p>
+                
+                <h3 style="margin-top: 30px;">2. Embodied Counterarguments (Hot Zone) <i class="fa-solid fa-users" style="color:#007acc;"></i></h3>
+                <p>User walks "The Street" and is confronted by...</p>
+                <div class="two-column">
+                    <div class="cluster-box provax">
+                        <p><strong>Doctor Avatar:</strong> "Your 'liberty' has consequences. My hospital is full. You failed to <code>pbrs:protect-01</code> the <code>mor:PublicGood</code>."</p>
+                    </div>
+                    <div class="cluster-box critical">
+                        <p><strong>Economist Avatar:</strong> "Your 'all-or-nothing' policy failed the <code>mor:Utility</code> test. A balanced (<code>pbrs:balance-01</code>) approach would have saved the economy."</p>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px;">3. Insight (`vrs:LearningOutcome`) <i class="fa-solid fa-brain" style="color:#10b981;"></i></h3>
+                <p>The "principled" <code>mor:Liberty</code> argument is not a magic solution; it has severe utilitarian consequences.<br>
+                <strong>Result: <code>vrs:PublicHealthMeter</code> collapses.</strong></p>
+            </div>
+        </div>
+        <footer>Step 5: VR Branch 2</footer>
+        <div class="slide-number">21</div>
+    </div>
+
+    <div class="slide-container" id="slide21">
+        <h2 class="slide-title">From KG to Unity: A Data-Driven Pipeline</h2>
+        <div class="content-area">
+            <div style="width: 100%;">
+                <p>The KG is not just a model; it's a <strong>"director's script"</strong> for the game engine. A <code>ScenarioManager.cs</code> script in Unity can:</p>
+                <ol style="font-size: 22px; line-height: 1.6; counter-reset: step 0;">
+                    <li><strong>Query</strong> the KG for the user's chosen branch (e.g., <code>:Branch1_ProvaxPolicy</code>).</li>
+                    <li><strong>Find</strong> the required encounters (e.g., <code>:Encounter1_BusinessOwner</code>).</li>
+                    <li><strong>Spawn</strong> the correct avatar (<code>vrs:hasAvatar :BusinessOwner</code>).</li>
+                    <li><strong>Query</strong> the avatar's attitude (<code>vax:AntivaxLibertarianAttitude</code>) to set its <strong>animation state</strong> (e.g., "Angry").</li>
+                    <li><strong>Query</strong> its argument (<code>kg:Libertarian_Argument</code>) and emotional frame (<code>emo:Anger</code>) to load the correct <strong>dialogue and animation trigger</strong>.</li>
+                </ol>
+                <p style="font-size: 22px; text-align: center; margin-top: 20px;"><strong>This creates a flexible, semantically-sound VR experience driven *directly* by the AI analysis.</strong></p>
+            </div>
+        </div>
+        <footer>Step 5: KG to Unity Pipeline</footer>
+        <div class="slide-number">22</div>
+    </div>
+
+    <div class="slide-container" id="slide22">
+        <h2 class="slide-title">Conclusion: From Text to Experience</h2>
+        <div class="content-area">
+            <ol class="step-list" style="counter-reset: step 0;">
+                <li>We successfully <strong>extracted</strong> knowledge from sample texts into a formal KG.</li>
+                <li>We <strong>clustered</strong> the vaccine debate into 5 distinct attitudinal frames.</li>
+                <li>We <strong>formalized</strong> these clusters in an ontology (<code>vaxattitude.ttl</code>) and modeled their conflicts (<code>vaccinedisputatiokg.ttl</code>).</li>
+                <li>We <strong>mapped</strong> these cognitive models to plausible neural substrates (<code>Amygdala</code> vs. <code>dlPFC</code>) and psychological profiles.</li>
+                <li>This KG acts as a <strong>blueprint</strong> to build a data-driven, interactive VR scenario.</li>
+                <li>The VR scenario uses <strong>embodied disputatio</strong> to force the user out of a "frame-lock" and foster the balanced, <strong><code>vax:CriticalAttitude</code></strong> perspective.</li>
+            </ol>
+        </div>
+        <footer>Conclusion</footer>
+        <div class="slide-number">23</div>
+    </div>
+
+</body>
+</html>
