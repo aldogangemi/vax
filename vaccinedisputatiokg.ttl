@@ -1,0 +1,137 @@
+@prefix : <http://www.example.org/vax-disputatio-kg/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix vax: <http://www.ontologydesignpatterns.org/ont/vax-attitude.owl#> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix semio: <http://www.ontologydesignpatterns.org/cp/owl/semiotics.owl#> .
+@prefix pbrs: <https://w3id.org/framester/data/propbank-3.4.0/RoleSet/> .
+@prefix emo: <http://www.ontologydesignpatterns.org/ont/emo/> .
+@prefix mor: <http://www.ontologydesignpatterns.org/ont/mor/> .
+@prefix blend: <http://www.ontologydesignpatterns.org/ont/blending/> .
+@prefix intent: <http://www.ontologydesignpatterns.org/ont/intent/> .
+@prefix disputatio: <http://www.ontologydesignpatterns.org/ont/disputatio/> .
+@prefix persp: <http://www.ontologydesignpatterns.org/ont/persp/> .
+@prefix actinf: <http://www.ontologydesignpatterns.org/ont/activeinference/> .
+@prefix polanyi: <http://www.ontologydesignpatterns.org/ont/polanyi/> .
+@prefix fred: <http://www.ontologydesignpatterns.org/ont/fred/domain.owl#> .
+@prefix caus: <http://www.ontologydesignpatterns.org/ont/caus/> .
+
+#################################################################
+#    Ontology: Vaccination Disputatio Knowledge Graph
+#    Formalizes the vaccinedisputatio.md file
+#################################################################
+
+<http://www.ontologydesignpatterns.org/ont/vax-attitude.owl/> rdf:type owl:Ontology ;
+    owl:imports <http://www.ontologydesignpatterns.org/ont/vax-attitude.owl/> ;
+    owl:imports <http://www.ontologydesignpatterns.org/ont/vax/vaccination_intent_t1.ttl> ;
+    rdfs:comment "A KG modeling a dispute use case with a five vaccination attitude clusters (Provax, Hesitant, Critical, Antivax-Libertarian, Antivax-Conspiratorial) as subclasses of dul:Situation, defined by the frames they use."@en .
+
+###    Property for the Challenge Relationship
+disputatio:challenges rdf:type owl:ObjectProperty ;
+    rdfs:domain disputatio:Disputatio ;
+    rdfs:range disputatio:Disputatio ;
+    rdfs:comment "Asserts that one argument or argumentative stance challenges another."@en .
+
+###    The Central Disputatio Event
+:Debate_HPV_Text rdf:type disputatio:Disputatio , dul:Situation ;
+    rdfs:label "The disputatio surrounding the HPV vaccine text."@en ;
+    dul:hasPart :AuthorAttitude_Provax,
+                :ChallengerAttitude_Hesitant,
+                :ChallengerAttitude_Critical,
+                :ChallengerAttitude_Libertarian,
+                :ChallengerAttitude_Conspiratorial .
+
+#################################################################
+#    Author's Position (The "Provax" Stance)
+#    - Based on vaccinepolanyiextendedgraph.ttl and vaccinedisputatio.md
+#################################################################
+
+:AuthorAttitude_Provax rdf:type vax:ProvaxAttitude , disputatio:Disputatio ;
+    rdfs:label "Author's Provax Attitude"@en ;
+    vax:hasStanceHolder fred:physician_1 ; # From polanyiextendedgraph.ttl
+    vax:directedAt fred:vaccine_2 ;        # From polanyiextendedgraph.ttl
+    vax:expressedIn polanyi:text_1 ;       # From polanyiextendedgraph.ttl
+    vax:justifiedBy polanyi:Arg_AuthorIntent ; # From polanyiextendedgraph.ttl
+    vax:usesEmotionalFrame emo:Confidence, emo:Relief .
+
+# polanyi:Arg_AuthorIntent (from the original graph) is defined as:
+# polanyi:Arg_AuthorIntent a disputatio:Disputatio ;
+#    disputatio:usesEvidence polanyi:Evid_Authority, polanyi:Evid_Fact .
+
+#################################################################
+#    1. The "Hesitant" Challenge
+#################################################################
+
+:Hesitant_Argument rdf:type disputatio:Argument ;
+    rdfs:label "Hesitant Argument: Fear of Unknowns"@en ;
+    disputatio:hasQuaestio [ a disputatio:Quaestio ; rdfs:comment "What about the unknown harm?"@en ] ;
+    disputatio:hasRespondeo [ a disputatio:Respondeo ; rdfs:comment "Your authority doesn't calm my personal fear."@en ] .
+
+:ChallengerAttitude_Hesitant rdf:type vax:HesitantAttitude , disputatio:Disputatio ;
+    rdfs:label "Hesitant Challenger Attitude"@en ;
+    vax:hasStanceHolder [ a dul:Agent ; rdfs:label "Hesitant Challenger"@en ] ;
+    vax:directedAt fred:vaccine_2 ;
+    vax:justifiedBy :Hesitant_Argument ;
+    vax:usesEmotionalFrame emo:Fear, emo:Anxiety, emo:Confusion ;
+    vax:usesMetaphoricalFrame blend:RiskAsLottery ;
+    vax:usesFrame [ a caus:Causality ; rdfs:comment "(get_vaccine) caus:causes (unknown_harm)"@en ] ;
+    disputatio:challenges :AuthorAttitude_Provax .
+
+#################################################################
+#    2. The "Critical" Challenge
+#################################################################
+
+:Critical_Argument rdf:type disputatio:Argument ;
+    rdfs:label "Critical Argument: Lack of Balanced Analysis"@en ;
+    disputatio:hasQuaestio [ a disputatio:Quaestio ; rdfs:comment "What about the trade-offs and fairness?"@en ] ;
+    disputatio:hasRespondeo [ a disputatio:Respondeo ; rdfs:comment "Your argument ignores cost-benefit, utility, and fairness."@en ] .
+
+:ChallengerAttitude_Critical rdf:type vax:CriticalAttitude , disputatio:Disputatio ;
+    rdfs:label "Critical Challenger Attitude"@en ;
+    vax:hasStanceHolder [ a dul:Agent ; rdfs:label "Critical Challenger"@en ] ;
+    vax:directedAt polanyi:Goal_PromoteVaccination ; # Challenges the *goal*
+    vax:justifiedBy :Critical_Argument ;
+    vax:usesConceptualFrame pbrs:weigh-01, pbrs:balance-01 ;
+    vax:usesMoralFrame mor:Fairness, mor:Utility ;
+    vax:framedBy [ a persp:Perspectivisation ; persp:Lens <http://www.ontologydesignpatterns.org/ont/polanyi/EconomicLens> ] ;
+    disputatio:challenges :AuthorAttitude_Provax .
+
+#################################################################
+#    3. The "Antivax (Libertarian)" Challenge
+#################################################################
+
+:Libertarian_Argument rdf:type disputatio:Argument ;
+    rdfs:label "Libertarian Argument: Reframing to Morality"@en ;
+    disputatio:hasQuaestio [ a disputatio:Quaestio ; rdfs:comment "Is the mandate moral?"@en ] ;
+    disputatio:hasRespondeo [ a disputatio:Respondeo ; rdfs:comment "This is a political violation of liberty, not a medical issue."@en ] .
+
+:ChallengerAttitude_Libertarian rdf:type vax:AntivaxLibertarianAttitude , disputatio:Disputatio ;
+    rdfs:label "Antivax-Libertarian Challenger Attitude"@en ;
+    vax:hasStanceHolder [ a dul:Agent ; rdfs:label "Libertarian Challenger"@en ] ;
+    vax:directedAt [ a dul:Object ; rdfs:label "Vaccine Mandate"@en ] ;
+    vax:justifiedBy :Libertarian_Argument ;
+    vax:usesConceptualFrame pbrs:force-01, pbrs:violate-01 ;
+    vax:usesMoralFrame mor:Liberty, mor:Autonomy ;
+    vax:usesMetaphoricalFrame blend:MandateAsTyranny ;
+    disputatio:challenges :AuthorAttitude_Provax .
+
+#################################################################
+#    4. The "Antivax (Conspiratorial)" Challenge
+#################################################################
+
+:Conspiratorial_Argument rdf:type disputatio:Argument ;
+    rdfs:label "Conspiratorial Argument: Author's Malicious Intent"@en ;
+    disputatio:hasQuaestio [ a disputatio:Quaestio ; rdfs:comment "What is the author's secret, true goal?"@en ] ;
+    disputatio:hasRespondeo [ a disputatio:Respondeo ; rdfs:comment "The author is lying to achieve total control."@en ] .
+
+:ChallengerAttitude_Conspiratorial rdf:type vax:AntivaxConspiratorialAttitude , disputatio:Disputatio ;
+    rdfs:label "Antivax-Conspiratorial Challenger Attitude"@en ;
+    vax:hasStanceHolder [ a dul:Agent ; rdfs:label "Conspiratorial Challenger"@en ] ;
+    vax:directedAt fred:physician_1 ; # Directed at the *author*
+    vax:justifiedBy :Conspiratorial_Argument ;
+    vax:usesConceptualFrame pbrs:lie-01, pbrs:hide-01 ;
+    vax:usesFrame intent:Goal_TotalControl_1 ; # This frame *is* the argument
+    vax:usesEmotionalFrame emo:Distrust ;
+    disputatio:challenges :AuthorAttitude_Provax .

@@ -1,0 +1,328 @@
+@prefix actinf: <http://www.ontologydesignpatterns.org/ont/activeinference/> .
+@prefix amr: <https://w3id.org/framester/amr/> .
+@prefix bdi: <http://www.ontologydesignpatterns.org/ont/bdi/> .
+@prefix blend: <http://www.ontologydesignpatterns.org/ont/blending/> .
+@prefix boxing: <http://www.ontologydesignpatterns.org/ont/boxer/boxing.owl#> .
+@prefix caus: <http://www.ontologydesignpatterns.org/ont/caus/> .
+@prefix coerce: <http://www.ontologydesignpatterns.org/ont/coerce/> .
+@prefix disputatio: <http://www.ontologydesignpatterns.org/ont/disputatio/> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix emo: <http://www.ontologydesignpatterns.org/ont/emo/> .
+@prefix fred: <http://www.ontologydesignpatterns.org/ont/fred/domain.owl#> .
+@prefix impact: <http://www.ontologydesignpatterns.org/ont/impact/> .
+@prefix intent: <http://www.ontologydesignpatterns.org/ont/intent/> .
+@prefix mor: <http://www.ontologydesignpatterns.org/ont/mor/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pblr: <https://w3id.org/framester/data/propbank-3.4.0/LocalRole/> .
+@prefix pbrs: <https://w3id.org/framester/data/propbank-3.4.0/RoleSet/> .
+@prefix persp: <http://www.ontologydesignpatterns.org/ont/persp/> .
+@prefix polanyi: <http://www.ontologydesignpatterns.org/ont/polanyi/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix semio: <http://www.ontologydesignpatterns.org/cp/owl/semiotics.owl#> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# =============================================================================
+# == ONTOLOGY AND PROVENANCE (STEP 0, 1, 11)
+# =============================================================================
+
+<http://www.ontologydesignpatterns.org/ont/vax/vaccination_intent_t1.ttl>
+    a owl:Ontology ;
+    rdfs:comment "Extended Knowledge Graph (E) for sample text S, analyzing authorial intent regarding HPV vaccination, using the Polanyi heuristic tacit knowledge extractor."@en ;
+    owl:imports <http://www.ontologydesignpatterns.org/ont/polanyiontoreg.ttl> .
+
+polanyi:text_1 a semio:Expression ;
+    dul:hasDataValue "In this video, a family physician explains his decision, as a doctor and a parent, to make sure each of his children received HPV vaccine at age 11 or 12. HPV vaccine is cancer prevention. Ask about it for your child." ;
+    semio:hasInterpretation <http://www.ontologydesignpatterns.org/ont/polanyi/vaccination_intent.ttl> .
+
+# --- Property Declarations (CRITICAL STEP 1 & 2.5) ---
+polanyi:provenance a owl:AnnotationProperty .
+semio:expressedBy a owl:ObjectProperty .
+semio:hasInterpretation a owl:ObjectProperty .
+dul:hasDataValue a owl:DatatypeProperty .
+dul:hasQuality a owl:ObjectProperty .
+dul:hasMember a owl:ObjectProperty .
+dul:precedes a owl:ObjectProperty .
+pblr:explain-01.explainer a owl:ObjectProperty .
+pblr:explain-01.thing-explained a owl:ObjectProperty .
+pblr:decide-01.decider a owl:ObjectProperty .
+pblr:decide-01.the-decision-itself a owl:ObjectProperty .
+pblr:ensure-01.agent a owl:ObjectProperty .
+pblr:ensure-01.to-what a owl:ObjectProperty .
+pblr:receive-01.receiver a owl:ObjectProperty .
+pblr:receive-01.thing-gotten a owl:ObjectProperty .
+pblr:prevent-01.instrument a owl:ObjectProperty .
+pblr:prevent-01.theme a owl:ObjectProperty .
+pblr:ask-01.asker a owl:ObjectProperty .
+pblr:ask-01.question a owl:ObjectProperty .
+amr:manner a owl:ObjectProperty .
+amr:medium a owl:ObjectProperty .
+impact:hasExpectedEmotionalImpact a owl:ObjectProperty .
+coerce:hasMetonymicType a owl:ObjectProperty .
+coerce:coercedFrom a owl:ObjectProperty .
+coerce:coercedTo a owl:ObjectProperty .
+coerce:standsFor a owl:ObjectProperty .
+blend:blends a owl:ObjectProperty .
+blend:hasCriterion a owl:ObjectProperty .
+blend:sourceOf a owl:ObjectProperty .
+caus:causes a owl:ObjectProperty .
+caus:prevents a owl:ObjectProperty .
+persp:Conceptualiser a owl:ObjectProperty .
+persp:Eventuality a owl:ObjectProperty .
+persp:Lens a owl:ObjectProperty .
+persp:CogBias a owl:ObjectProperty .
+persp:alignsWith a owl:ObjectProperty .
+disputatio:hasQuaestio a owl:ObjectProperty .
+disputatio:hasRespondeo a owl:ObjectProperty .
+disputatio:supportsPosition a owl:ObjectProperty .
+disputatio:usesEvidence a owl:ObjectProperty .
+disputatio:evidenceSource a owl:ObjectProperty .
+disputatio:basedOn a owl:ObjectProperty .
+disputatio:leadsTo a owl:ObjectProperty .
+polanyi:hasArgumentationStrategy a owl:ObjectProperty .
+intent:hasGoal a owl:ObjectProperty .
+intent:justifiedBy a owl:ObjectProperty .
+bdi:desireFor a owl:ObjectProperty .
+actinf:hasPriorBelief a owl:ObjectProperty .
+actinf:prediction a owl:ObjectProperty .
+actinf:basedOn a owl:ObjectProperty .
+actinf:implements a owl:ObjectProperty .
+actinf:aimsToMinimize a owl:ObjectProperty .
+actinf:beliefContent a owl:ObjectProperty .
+
+# =============================================================================
+# == BASE GRAPH (B) - RELEVANT SUBSET (STEP 3)
+# =============================================================================
+# --- Core Entities ---
+fred:physician_1 a fred:FamilyPhysician ;
+    rdfs:label "family physician"@en ;
+    semio:expressedBy "family physician"@en , "his"@en , "doctor"@en , "parent"@en .
+
+fred:vaccine_1 a fred:Vaccine ;
+    rdfs:label "HPV vaccine"@en ;
+    semio:expressedBy "HPV vaccine"@en .
+
+fred:vaccine_2 a fred:Vaccine ;
+    rdfs:label "HPV vaccine"@en ;
+    semio:expressedBy "HPV vaccine"@en .
+
+fred:cancer_1 a fred:Cancer ;
+    rdfs:label "cancer"@en ;
+    semio:expressedBy "cancer"@en .
+
+# --- Core Events (Frames) ---
+fred:explain_1 a pbrs:explain-01 ;
+    semio:expressedBy "explains"@en ;
+    amr:medium fred:video_1 ;
+    pblr:explain-01.explainer fred:physician_1 ;
+    pblr:explain-01.thing-explained fred:decide_1 .
+
+fred:decide_1 a pbrs:decide-01 ;
+    semio:expressedBy "decision"@en ;
+    pblr:decide-01.decider fred:physician_1 ;
+    pblr:decide-01.the-decision-itself fred:ensure_1 .
+
+fred:ensure_1 a pbrs:ensure-01 ;
+    semio:expressedBy "make sure"@en ;
+    pblr:ensure-01.agent fred:physician_1 ;
+    pblr:ensure-01.to-what fred:receive_1 .
+
+fred:receive_1 a pbrs:receive-01 ;
+    semio:expressedBy "received"@en ;
+    pblr:receive-01.receiver fred:child_1 ;
+    pblr:receive-01.thing-gotten fred:vaccine_1 .
+
+fred:prevent_1 a pbrs:prevent-01 ;
+    semio:expressedBy "prevention"@en ;
+    pblr:prevent-01.instrument fred:vaccine_2 ;
+    pblr:prevent-01.theme fred:cancer_1 .
+
+fred:ask_1 a pbrs:ask-01 ;
+    semio:expressedBy "Ask about it"@en ;
+    amr:mode amr:imperative ;
+    pblr:ask-01.asker fred:audience_1 ;
+    pblr:ask-01.question fred:vaccine_2 .
+
+# =============================================================================
+# == HEURISTIC EXTENSIONS (H) (STEP 4)
+# =============================================================================
+
+# --- b1-RESOLUTION (Mandatory) ---
+# The physician is also the doctor and parent.
+fred:physician_1 owl:sameAs fred:doctor_1 , fred:person_2 .
+fred:vaccine_1 owl:sameAs fred:vaccine_2 .
+
+# --- b2-PLAUSIBILITY (Mandatory) ---
+# Correcting faulty link in example B. HPV is not Hepatitis.
+fred:hpv_1 a amr:Disease ;
+    rdfs:label "Human Papillomavirus"@en ;
+    owl:sameAs wd:Q11099 .
+fred:vaccine_1 dul:hasQuality fred:hpv_1 . # Corrected link
+fred:vaccine_1 owl:sameAs wd:Q335193 . # Link to HPV Vaccine
+
+[ a owl:Axiom ;
+  polanyi:provenance "b2-PLAUSIBILITY" ;
+  owl:annotatedProperty dul:hasQuality ;
+  owl:annotatedSource fred:vaccine_1 ;
+  owl:annotatedTarget fred:hpv_1 ] .
+
+# --- b6-IMPACT ---
+fred:physician_1 impact:hasExpectedEmotionalImpact emo:Relief , emo:Confidence ;
+    rdfs:comment "Physician feels relief/confidence in protecting his children."@en .
+
+[ a owl:Axiom ;
+  polanyi:provenance "b6-IMPACT" ;
+  owl:annotatedProperty impact:hasExpectedEmotionalImpact ;
+  owl:annotatedSource fred:physician_1 ;
+  owl:annotatedTarget emo:Relief ] .
+
+# --- b7-COERCION (Metonymy) ---
+# "HPV vaccine is cancer prevention" (Instrument for Process)
+fred:vaccine_2 coerce:hasMetonymicType polanyi:InstrumentForProcess_1 .
+polanyi:InstrumentForProcess_1 a coerce:MetonymicCoercion ;
+    coerce:coercedFrom fred:vaccine_2 ;
+    coerce:coercedTo fred:prevent_1 ;
+    coerce:standsFor fred:prevent_1 .
+
+[ a owl:Axiom ;
+  polanyi:provenance "b7-COERCION" ;
+  owl:annotatedProperty coerce:hasMetonymicType ;
+  owl:annotatedSource fred:vaccine_2 ;
+  owl:annotatedTarget polanyi:InstrumentForProcess_1 ] .
+
+# --- b8-BLENDING ---
+# Blending the tool (vaccine) with the action (prevention)
+blend:VaccineAsPrevention a blend:Metaphor ;
+    blend:blends blend:MedicalTool, blend:ProtectiveAction ;
+    blend:hasCriterion blend:CausalityFrame ;
+    rdfs:comment "Conceptual blend where the tool embodies the action."@en .
+blend:MedicalTool blend:sourceOf blend:VaccineAsPrevention .
+
+[ a owl:Axiom ;
+  polanyi:provenance "b8-BLENDING" ;
+  owl:annotatedProperty blend:blends ;
+  owl:annotatedSource blend:VaccineAsPrevention ;
+  owl:annotatedTarget blend:MedicalTool ] .
+
+# --- b9-CAUSALITY ---
+# The vaccine (instrument of prevent_1) is received (receive_1), which causes prevention.
+fred:receive_1 caus:causes fred:prevent_1 .
+
+[ a owl:Axiom ;
+  polanyi:provenance "b9-CAUSALITY" ;
+  owl:annotatedProperty caus:causes ;
+  owl:annotatedSource fred:receive_1 ;
+  owl:annotatedTarget fred:prevent_1 ] .
+
+# --- b12-PERSPECTIVE ---
+# The author's decision (fred:decide_1) is framed by two perspectives.
+polanyi:DoctorPerspective a persp:Perspectivisation ;
+    persp:Conceptualiser fred:physician_1 ;
+    persp:Eventuality fred:decide_1 ;
+    persp:Lens polanyi:MedicalKnowledgeLens ;
+    persp:CogBias polanyi:AuthorityBias .
+
+polanyi:ParentPerspective a persp:Perspectivisation ;
+    persp:Conceptualiser fred:physician_1 ;
+    persp:Eventuality fred:decide_1 ;
+    persp:Lens polanyi:ParentalCareLens ;
+    persp:CogBias polanyi:EmotionalAppeal .
+
+# The rhetorical force comes from the alignment of these perspectives.
+polanyi:DoctorPerspective persp:alignsWith polanyi:ParentPerspective .
+
+[ a owl:Axiom ;
+  polanyi:provenance "b12-PERSPECTIVE" ;
+  owl:annotatedProperty persp:Conceptualiser ;
+  owl:annotatedSource polanyi:DoctorPerspective ;
+  owl:annotatedTarget fred:physician_1 ] .
+[ a owl:Axiom ;
+  polanyi:provenance "b12-PERSPECTIVE" ;
+  owl:annotatedProperty persp:CogBias ;
+  owl:annotatedSource polanyi:DoctorPerspective ;
+  owl:annotatedTarget polanyi:AuthorityBias ] .
+[ a owl:Axiom ;
+  polanyi:provenance "b12-PERSPECTIVE" ;
+  owl:annotatedProperty persp:CogBias ;
+  owl:annotatedSource polanyi:ParentPerspective ;
+  owl:annotatedTarget polanyi:EmotionalAppeal ] .
+
+# --- b18-DISJOINTNESS (Mandatory) ---
+fred:Physician owl:disjointWith fred:Cancer .
+fred:FamilyPhysician owl:disjointWith fred:Child .
+fred:Parent owl:disjointWith fred:Child . # In the context of the same relationship
+
+# =============================================================================
+# == TASK (T) & METHODS (M) (STEP 5, 6, 7)
+# =============================================================================
+
+# --- T: Author Intention & Argumentation (TASKDECOMPOSITION AGENT) ---
+polanyi:AuthorIntention a intent:Intention ;
+    rdfs:label "Author's Intention"@en ;
+    intent:hasGoal polanyi:Goal_PromoteVaccination ;
+    intent:justifiedBy polanyi:Arg_AuthorIntent .
+
+polanyi:Goal_PromoteVaccination a bdi:AchievementGoal ;
+    bdi:desireFor polanyi:PublicVaccinationUptake_1 ;
+    rdfs:comment "The goal is to promote public uptake of the HPV vaccine."@en .
+
+polanyi:Arg_AuthorIntent a disputatio:Disputatio ;
+    rdfs:label "Argument for Vaccination"@en ;
+    disputatio:hasQuaestio [ a disputatio:Quaestio ; rdfs:comment "Should a child receive the HPV vaccine?"@en ] ;
+    disputatio:hasRespondeo [ a disputatio:Respondeo ; rdfs:comment "Yes, it is a safe and effective cancer prevention measure."@en ; disputatio:basedOn polanyi:Justif1 ] .
+
+polanyi:Justif1 a disputatio:Argument ;
+    rdfs:label "Justification"@en ;
+    disputatio:supportsPosition polanyi:Arg_AuthorIntent ;
+    disputatio:usesEvidence polanyi:Evid_Authority, polanyi:Evid_Fact .
+
+polanyi:Evid_Authority a disputatio:Evidence , polanyi:ArgumentFromAuthority ;
+    rdfs:comment "Argument from Authority: A physician *and* parent trusts it for his own children."@en ;
+    semio:expressedBy "a family physician explains his decision, as a doctor and a parent"@en ;
+    disputatio:evidenceSource fred:decide_1 .
+
+polanyi:Evid_Fact a disputatio:Evidence ;
+    rdfs:comment "Argument from Fact: The vaccine is equated with the positive outcome (cancer prevention)."@en ;
+    semio:expressedBy "HPV vaccine is cancer prevention."@en ;
+    disputatio:evidenceSource fred:prevent_1 .
+
+polanyi:CallToAction a disputatio:Conclusio ;
+    rdfs:comment "Conclusion: The audience should seek information for their own child."@en ;
+    disputatio:basedOn polanyi:Justif1 ;
+    disputatio:leadsTo fred:ask_1 .
+
+# --- M: m6-ACTIVE-INFERENCE (ACTIVEINFERENCE AGENT) ---
+# The author selects a policy (argument) to minimize the prediction error (uncertainty/distrust) in the audience.
+
+polanyi:AuthorModel a actinf:GenerativeModel ;
+    rdfs:comment "Author's model of the target audience (parents)."@en ;
+    actinf:hasPriorBelief [
+        a bdi:Belief ;
+        actinf:beliefContent "Audience is uncertain or hesitant about HPV vaccine."@en
+    ] .
+
+polanyi:ArgumentPolicy a actinf:Policy ;
+    rdfs:comment "Policy: Use a combined appeal to authority (doctor) and emotion (parent)."@en ;
+    actinf:basedOn polanyi:AuthorModel ;
+    actinf:prediction [
+        a actinf:Prediction ;
+        rdfs:comment "This policy will reduce audience uncertainty and build trust, minimizing prediction error."@en
+    ] .
+
+polanyi:text_1 a actinf:Action ;
+    rdfs:comment "The text itself is the action executing the policy."@en ;
+    actinf:implements polanyi:ArgumentPolicy ;
+    actinf:aimsToMinimize polanyi:AudienceUncertainty_PredictionError .
+
+[ a owl:Axiom ;
+  polanyi:provenance "m6-ACTIVE-INFERENCE" ;
+  owl:annotatedProperty actinf:implements ;
+  owl:annotatedSource polanyi:text_1 ;
+  owl:annotatedTarget polanyi:ArgumentPolicy ] .
+
+[ a owl:Axiom ;
+  polanyi:provenance "T-ARGUMENTATION" ;
+  owl:annotatedProperty intent:hasGoal ;
+  owl:annotatedSource polanyi:AuthorIntention ;
+  owl:annotatedTarget polanyi:Goal_PromoteVaccination ] .

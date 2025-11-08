@@ -1,0 +1,262 @@
+@prefix : <http://www.ontologydesignpatterns.org/ont/vr-scenario.owl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix vax: <http://www.ontologydesignpatterns.org/ont/vax-attitude.owl#> .
+@prefix vrs: <http://www.ontologydesignpatterns.org/ont/vr-scenario.owl#> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix semio: <http://www.ontologydesignpatterns.org/cp/owl/semiotics.owl#> .
+@prefix pbrs: <https://w3id.org/framester/data/propbank-3.4.0/RoleSet/> .
+@prefix emo: <http://www.ontologydesignpatterns.org/ont/emo/> .
+@prefix mor: <http://www.ontologydesignpatterns.org/ont/mor/> .
+@prefix blend: <http://www.ontologydesignpatterns.org/ont/blending/> .
+@prefix intent: <http://www.ontologydesignpatterns.org/ont/intent/> .
+@prefix disputatio: <http://www.ontologydesignpatterns.org/ont/disputatio/> .
+@prefix persp: <http://www.ontologydesignpatterns.org/ont/persp/> .
+@prefix polanyi: <http://www.ontologydesignpatterns.org/ont/polanyi/> .
+@prefix kg: <http://www.example.org/vax-disputatio-kg/> .
+
+#################################################################
+#    Ontology: Vaccination Attitude VR Scenario (vrs:)
+#    Extends vaxattitude.owl to model VR scenario components.
+#################################################################
+
+<http://www.ontologydesignpatterns.org/ont/vr-scenario.owl>
+    rdf:type owl:Ontology ;
+    owl:imports <http://www.ontologydesignpatterns.org/ont/vax-attitude.owl> ;
+    rdfs:comment "An ontology to model VR scenarios for attitude change, based on the Polanyi/vax-attitude framework."@en .
+
+#################################################################
+#    VRS Classes (Ontology Extension)
+#################################################################
+
+vrs:VRScenario rdf:type owl:Class ;
+    rdfs:subClassOf dul:Situation ;
+    rdfs:comment "A Virtual Reality scenario designed to model a complex system and foster learning or attitude change."@en .
+
+vrs:ScenarioZone rdf:type owl:Class ;
+    rdfs:subClassOf dul:Place ;
+    rdfs:comment "A distinct location or environment within the VR scenario, often tied to specific frames."@en .
+
+vrs:Avatar rdf:type owl:Class ;
+    rdfs:subClassOf dul:Agent ;
+    rdfs:comment "A non-player character (NPC) agent within the scenario that embodies a specific role or attitude."@en .
+
+vrs:GameMeter rdf:type owl:Class ;
+    rdfs:subClassOf dul:InformationObject ;
+    rdfs:comment "A measurable variable representing the state of the scenario (e.g., 'Public Trust')."@en .
+
+vrs:ScenarioMechanism rdf:type owl:Class ;
+    rdfs:subClassOf dul:Method ;
+    rdfs:comment "The core logic or mechanic that drives the scenario, e.g., a disputatio."@en .
+
+vrs:ScenarioBranch rdf:type owl:Class ;
+    rdfs:subClassOf dul:Situation ;
+    rdfs:comment "A specific path or sequence of events in the scenario, usually triggered by a user's action."@en .
+
+vrs:UserPolicy rdf:type owl:Class ;
+    rdfs:subClassOf dul:Action , disputatio:Argument ;
+    rdfs:comment "The user's chosen action or policy, which functions as their 'argument' in the disputatio."@en .
+
+vrs:CognitiveAxis rdf:type owl:Class ;
+    rdfs:subClassOf dul:Quality ;
+    rdfs:comment "The cognitive or emotional nature of a scenario zone, e.g., 'Hot' or 'Cold'."@en .
+
+vrs:LearningOutcome rdf:type owl:Class ;
+    rdfs:subClassOf dul:InformationObject ;
+    rdfs:comment "The intended insight or 'idea changing' that the scenario aims to deliver."@en .
+
+#################################################################
+#    VRS Properties (Ontology Extension)
+#################################################################
+
+vrs:hasZone rdf:type owl:ObjectProperty ;
+    rdfs:domain vrs:VRScenario ;
+    rdfs:range vrs:ScenarioZone .
+
+vrs:hasAvatar rdf:type owl:ObjectProperty ;
+    rdfs:domain vrs:ScenarioZone ;
+    rdfs:range vrs:Avatar .
+
+vrs:hasMechanism rdf:type owl:ObjectProperty ;
+    rdfs:domain vrs:VRScenario ;
+    rdfs:range vrs:ScenarioMechanism .
+
+vrs:hasMeter rdf:type owl:ObjectProperty ;
+    rdfs:domain vrs:VRScenario ;
+    rdfs:range vrs:GameMeter .
+
+vrs:hasBranch rdf:type owl:ObjectProperty ;
+    rdfs:domain vrs:VRScenario ;
+    rdfs:range vrs:ScenarioBranch .
+
+vrs:hasCognitiveAxis rdf:type owl:ObjectProperty ;
+    rdfs:domain vrs:ScenarioZone ;
+    rdfs:range vrs:CognitiveAxis .
+
+vrs:triggeredBy rdf:type owl:ObjectProperty ;
+    rdfs:domain vrs:ScenarioBranch ;
+    rdfs:range vrs:UserPolicy .
+
+vrs:presentsCounterargument rdf:type owl:ObjectProperty ;
+    rdfs:domain vrs:Avatar ;
+    rdfs:range disputatio:Argument ;
+    rdfs:comment "Links an avatar to the specific argument (from the disputatio KG) they will deliver."@en .
+
+vrs:leadsToOutcome rdf:type owl:ObjectProperty ;
+    rdfs:domain vrs:ScenarioBranch ;
+    rdfs:range vrs:LearningOutcome .
+
+vrs:fostersAttitude rdf:type owl:ObjectProperty ;
+    rdfs:domain vrs:VRScenario ;
+    rdfs:range vax:VaccinationAttitude ;
+    rdfs:comment "The intended attitudinal shift the scenario aims to produce."@en .
+
+vrs:engagesFrame rdf:type owl:ObjectProperty ;
+    rdfs:domain vrs:ScenarioZone ;
+    rdfs:range vax:Frame .
+
+#################################################################
+#    Individuals: VR Scenario Formalization
+#    (Instantiating the scenario from vaccinevrscenario.txt)
+#################################################################
+
+###    Cognitive Axes
+vrs:HotCognition rdf:type owl:NamedIndividual , vrs:CognitiveAxis ;
+    rdfs:label "Hot Cognition (Emotional, Personal, Conflict)"@en .
+
+vrs:ColdCognition rdf:type owl:NamedIndividual , vrs:CognitiveAxis ;
+    rdfs:label "Cold Cognition (Rational, Utilitarian)"@en .
+
+###    The Scenario Itself
+:VRTownHallScenario rdf:type owl:NamedIndividual , vrs:VRScenario ;
+    rdfs:label "VR Public Health Director Scenario"@en ;
+    dul:hasLocation [ rdf:type dul:Place ; rdfs:label "Small, 10,000-person town"@en ] ;
+    intent:hasGoal :IdeaChangingOutcome ;
+    vrs:fostersAttitude vax:CriticalAttitude ;
+    vrs:hasMechanism :DisputatioMechanism ;
+    vrs:hasMeter :PublicHealthMeter, :PublicTrustMeter ;
+    vrs:hasZone :MayorsOffice, :TheStreet ;
+    vrs:hasBranch :Branch1_ProvaxPolicy, :Branch2_AntivaxPolicy .
+
+:User rdf:type owl:NamedIndividual , dul:Agent ;
+    dul:playsRole [ rdf:type dul:Role ; rdfs:label "Public Health Director / Mayor"@en ] .
+
+###    Scenario Meters
+:PublicHealthMeter rdf:type owl:NamedIndividual , vrs:GameMeter ;
+    rdfs:label "Public Health Meter"@en .
+
+:PublicTrustMeter rdf:type owl:NamedIndividual , vrs:GameMeter ;
+    rdfs:label "Public Trust Meter"@en .
+
+###    Scenario Mechanism
+:DisputatioMechanism rdf:type owl:NamedIndividual , vrs:ScenarioMechanism ;
+    rdfs:label "Disputatio ad utrumque partem"@en ;
+    rdfs:comment "The scenario uses embodied counterarguments to force the user to argue both sides."@en .
+
+###    Scenario Zones and Avatars
+
+:MayorsOffice rdf:type owl:NamedIndividual , vrs:ScenarioZone ;
+    rdfs:label "The Mayor's Office (Cold Space)"@en ;
+    vrs:hasCognitiveAxis vrs:ColdCognition ;
+    vrs:engagesFrame mor:PublicGood, mor:Utility ;
+    vrs:hasAvatar :CDCAdvisor, :TownEconomist .
+
+:TheStreet rdf:type owl:NamedIndividual , vrs:ScenarioZone ;
+    rdfs:label "The Street (Hot Space)"@en ;
+    vrs:hasCognitiveAxis vrs:HotCognition ;
+    vrs:engagesFrame mor:Care, mor:Fairness, mor:Liberty, emo:Fear ;
+    vrs:hasAvatar :HesitantParent, :BusinessOwner, :ConspiracyNeighbor, :ClinicDoctor .
+
+###    Avatars (with their embodied attitudes)
+
+:CDCAdvisor rdf:type owl:NamedIndividual , vrs:Avatar ;
+    rdfs:label "CDC Advisor"@en ;
+    vax:exhibitsAttitude vax:ProvaxAttitude .
+
+:TownEconomist rdf:type owl:NamedIndividual , vrs:Avatar ;
+    rdfs:label "Town Economist"@en ;
+    vax:exhibitsAttitude vax:CriticalAttitude .
+
+:HesitantParent rdf:type owl:NamedIndividual , vrs:Avatar ;
+    rdfs:label "Hesitant Parent in a Park"@en ;
+    vax:exhibitsAttitude vax:HesitantAttitude .
+
+:BusinessOwner rdf:type owl:NamedIndividual , vrs:Avatar ;
+    rdfs:label "Business Owner"@en ;
+    vax:exhibitsAttitude vax:AntivaxLibertarianAttitude .
+
+:ConspiracyNeighbor rdf:type owl:NamedIndividual , vrs:Avatar ;
+    rdfs:label "Neighbor"@en ;
+    vax:exhibitsAttitude vax:AntivaxConspiratorialAttitude .
+
+:ClinicDoctor rdf:type owl:NamedIndividual , vrs:Avatar ;
+    rdfs:label "Doctor in a Clinic"@en ;
+    vax:exhibitsAttitude vax:ProvaxAttitude .
+
+#################################################################
+#    Scenario Branches & Disputatio Payloads
+#    (This connects the VR scenario to the vaccinedisputatiokg.ttl arguments)
+#################################################################
+
+###    Branch 1: User chooses a "Provax" policy
+:ProvaxPolicyChoice rdf:type owl:NamedIndividual , vrs:UserPolicy ;
+    rdfs:label "User Policy: Institute a town-wide vaccine mandate."@en ;
+    vax:usesMoralFrame mor:PublicGood ;
+    vax:usesConceptualFrame pbrs:protect-01 .
+
+:Branch1_ProvaxPolicy rdf:type owl:NamedIndividual , vrs:ScenarioBranch ;
+    rdfs:label "Branch 1: User enforces mandate."@en ;
+    vrs:triggeredBy :ProvaxPolicyChoice ;
+    dul:hasPart :Encounter1_BusinessOwner, :Encounter1_HesitantParent, :Encounter1_Neighbor ;
+    vrs:leadsToOutcome :Insight1_TrustCollapse .
+
+#    Avatars deliver their counterarguments (from vaccinedisputatiokg.ttl)
+:Encounter1_BusinessOwner rdf:type owl:NamedIndividual , dul:Situation ;
+    vrs:hasAvatar :BusinessOwner ;
+    vrs:presentsCounterargument kg:Libertarian_Argument .
+
+:Encounter1_HesitantParent rdf:type owl:NamedIndividual , dul:Situation ;
+    vrs:hasAvatar :HesitantParent ;
+    vrs:presentsCounterargument kg:Hesitant_Argument .
+
+:Encounter1_Neighbor rdf:type owl:NamedIndividual , dul:Situation ;
+    vrs:hasAvatar :ConspiracyNeighbor ;
+    vrs:presentsCounterargument kg:Conspiratorial_Argument .
+
+:Insight1_TrustCollapse rdf:type owl:NamedIndividual , vrs:LearningOutcome ;
+    rdfs:label "Insight: 'Rational' policy is not heard and activates counter-frames, collapsing Public Trust."@en .
+
+###    Branch 2: User chooses an "Antivax-Libertarian" policy
+:AntivaxPolicyChoice rdf:type owl:NamedIndividual , vrs:UserPolicy ;
+    rdfs:label "User Policy: No mandates, 100% personal choice."@en ;
+    vax:usesMoralFrame mor:Liberty ;
+    vax:usesConceptualFrame pbrs:choose-01 .
+
+:Branch2_AntivaxPolicy rdf:type owl:NamedIndividual , vrs:ScenarioBranch ;
+    rdfs:label "Branch 2: User enforces 'choice'."@en ;
+    vrs:triggeredBy :AntivaxPolicyChoice ;
+    dul:hasPart :Encounter2_Doctor, :Encounter2_Economist, :Encounter2_HesitantParent ;
+    vrs:leadsToOutcome :Insight2_HealthCollapse .
+
+#    Avatars deliver their counterarguments
+:Encounter2_Doctor rdf:type owl:NamedIndividual , dul:Situation ;
+    vrs:hasAvatar :ClinicDoctor ;
+    vrs:presentsCounterargument [ rdf:type disputatio:Argument ; rdfs:label "Provax Consequence Argument (Hospital Full)"@en ] .
+
+:Encounter2_Economist rdf:type owl:NamedIndividual , dul:Situation ;
+    vrs:hasAvatar :TownEconomist ;
+    vrs:presentsCounterargument kg:Critical_Argument .
+
+:Encounter2_HesitantParent rdf:type owl:NamedIndividual , dul:Situation ;
+    vrs:hasAvatar :HesitantParent ;
+    vrs:presentsCounterargument [ rdf:type disputatio:Argument ; rdfs:label "Hesitant Consequence Argument (No Guidance)"@en ] .
+
+:Insight2_HealthCollapse rdf:type owl:NamedIndividual , vrs:LearningOutcome ;
+    rdfs:label "Insight: 'Principled' policy is not a solution and has utilitarian/personal consequences, collapsing Public Health."@en .
+
+###    The Overall Scenario Goal/Outcome
+:IdeaChangingOutcome rdf:type owl:NamedIndividual , vrs:LearningOutcome ;
+    rdfs:label "Idea Changing: Forced evolution to the Critical perspective."@en ;
+    rdfs:comment "The only 'solution' is to find a balanced path by adopting Critical frames (weigh, balance, fairness), moving from the poles to the middle."@en .

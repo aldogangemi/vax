@@ -1,0 +1,135 @@
+@prefix : <http://www.example.org/vax-disputatio-kg-neuro-ext/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vax: <http://www.ontologydesignpatterns.org/ont/vax-attitude.owl#> .
+@prefix neuro: <http://www.ontologydesignpatterns.org/ont/neuro.owl#> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix actinf: <http://www.ontologydesignpatterns.org/ont/activeinference/> .
+@prefix disputatio: <http://www.ontologydesignpatterns.org/ont/disputatio/> .
+@prefix kg: <http://www.example.org/vax-disputatio-kg/> .
+@prefix pbrs: <https://w3id.org/framester/data/propbank-3.4.0/RoleSet/> .
+@prefix emo: <http://www.ontologydesignpatterns.org/ont/emo/> .
+@prefix mor: <http://www.ontologydesignpatterns.org/ont/mor/> .
+
+#################################################################
+#    Ontology: Vaccination Disputatio KG (Neuro Extension)
+#    Imports the original disputatio KG and the new neuro ontology
+#    to link each attitude instance to a generative model
+#    and its plausible neural activation.
+#################################################################
+
+<http://www.example.org/vax-disputatio-kg-neuro-ext/>
+    rdf:type owl:Ontology ;
+    owl:imports <http://www.example.org/vax-disputatio-kg/> ,
+                <http://www.ontologydesignpatterns.org/ont/vax-attitude-neuro-extension.owl> ;
+    rdfs:comment "Extends the disputatio KG with Active Inference models and plausible neural correlates for each attitude."@en .
+
+#################################################################
+#    Prediction Error Individuals
+#################################################################
+
+:SocialHarm_PredictionError rdf:type owl:NamedIndividual , neuro:PredictionError ;
+    rdfs:label "Social Harm Prediction Error"@en .
+
+:PersonalHarm_PredictionError rdf:type owl:NamedIndividual , neuro:PredictionError ;
+    rdfs:label "Personal Harm Prediction Error"@en .
+
+:OverallUtility_PredictionError rdf:type owl:NamedIndividual , neuro:PredictionError ;
+    rdfs:label "Overall Utility Prediction Error"@en .
+
+:AutonomyViolation_PredictionError rdf:type owl:NamedIndividual , neuro:PredictionError ;
+    rdfs:label "Autonomy Violation Prediction Error"@en .
+
+:Deception_PredictionError rdf:type owl:NamedIndividual , neuro:PredictionError ;
+    rdfs:label "Deception Prediction Error"@en .
+
+#################################################################
+#    1. Provax Attitude Neuro-Cognitive Model
+#################################################################
+
+kg:AuthorAttitude_Provax
+    vax:drivenBy :Provax_GenModel .
+
+:Provax_GenModel rdf:type owl:NamedIndividual , actinf:GenerativeModel ;
+    rdfs:label "Provax Generative Model (Authority & Protection)"@en ;
+    actinf:hasPriorBelief mor:PublicGood, emo:Trust, polanyi:Evid_Authority ;
+    actinf:aimsToMinimize :SocialHarm_PredictionError ;
+    vax:hasPlausibleActivation :Provax_Activation .
+
+:Provax_Activation rdf:type owl:NamedIndividual , neuro:PlausibleActivationPattern ;
+    rdfs:label "Plausible Provax Activation"@en ;
+    rdfs:comment "Cognitive control, trust, and pro-social value integration."@en ;
+    neuro:involvesRegion neuro:dlPFC, neuro:vmPFC .
+
+#################################################################
+#    2. Hesitant Attitude Neuro-Cognitive Model
+#################################################################
+
+kg:ChallengerAttitude_Hesitant
+    vax:drivenBy :Hesitant_GenModel .
+
+:Hesitant_GenModel rdf:type owl:NamedIndividual , actinf:GenerativeModel ;
+    rdfs:label "Hesitant Generative Model (Fear & Uncertainty)"@en ;
+    actinf:hasPriorBelief emo:Fear, pbrs:risk-01, mor:Purity ;
+    actinf:aimsToMinimize :PersonalHarm_PredictionError ;
+    vax:hasPlausibleActivation :Hesitant_Activation .
+
+:Hesitant_Activation rdf:type owl:NamedIndividual , neuro:PlausibleActivationPattern ;
+    rdfs:label "Plausible Hesitant Activation"@en ;
+    rdfs:comment "Threat detection, high anxiety, and interoceptive focus on risk/disgust."@en ;
+    neuro:involvesRegion neuro:Amygdala, neuro:Insula .
+
+#################################################################
+#    3. Critical Attitude Neuro-Cognitive Model
+#################################################################
+
+kg:ChallengerAttitude_Critical
+    vax:drivenBy :Critical_GenModel .
+
+:Critical_GenModel rdf:type owl:NamedIndividual , actinf:GenerativeModel ;
+    rdfs:label "Critical Generative Model (Balance & Utility)"@en ;
+    actinf:hasPriorBelief pbrs:weigh-01, pbrs:balance-01, mor:Fairness, mor:Utility ;
+    actinf:aimsToMinimize :OverallUtility_PredictionError ;
+    vax:hasPlausibleActivation :Critical_Activation .
+
+:Critical_Activation rdf:type owl:NamedIndividual , neuro:PlausibleActivationPattern ;
+    rdfs:label "Plausible Critical Activation"@en ;
+    rdfs:comment "Executive function (weighing options) and perspective-taking (fairness)."@en ;
+    neuro:involvesRegion neuro:dlPFC, neuro:TPJ .
+
+#################################################################
+#    4. Antivax (Libertarian) Neuro-Cognitive Model
+#################################################################
+
+kg:ChallengerAttitude_Libertarian
+    vax:drivenBy :Libertarian_GenModel .
+
+:Libertarian_GenModel rdf:type owl:NamedIndividual , actinf:GenerativeModel ;
+    rdfs:label "Libertarian Generative Model (Liberty & Antagonism)"@en ;
+    actinf:hasPriorBelief mor:Liberty, mor:Autonomy, pbrs:force-01 ;
+    actinf:aimsToMinimize :AutonomyViolation_PredictionError ;
+    vax:hasPlausibleActivation :Libertarian_Activation .
+
+:Libertarian_Activation rdf:type owl:NamedIndividual , neuro:PlausibleActivationPattern ;
+    rdfs:label "Plausible Libertarian Activation"@en ;
+    rdfs:comment "Social threat detection (anger) and violation of sacred moral values (liberty)."@en ;
+    neuro:involvesRegion neuro:Amygdala, neuro:vmPFC .
+
+#################################################################
+#    5. Antivax (Conspiratorial) Neuro-Cognitive Model
+#################################################################
+
+kg:ChallengerAttitude_Conspiratorial
+    vax:drivenBy :Conspiratorial_GenModel .
+
+:Conspiratorial_GenModel rdf:type owl:NamedIndividual , actinf:GenerativeModel ;
+    rdfs:label "Conspiratorial Generative Model (Secrecy & Malice)"@en ;
+    actinf:hasPriorBelief pbrs:lie-01, emo:Distrust, intent:Goal_TotalControl_1 ;
+    actinf:aimsToMinimize :Deception_PredictionError ;
+    vax:hasPlausibleActivation :Conspiratorial_Activation .
+
+:Conspiratorial_Activation rdf:type owl:NamedIndividual , neuro:PlausibleActivationPattern ;
+    rdfs:label "Plausible Conspiratorial Activation"@en ;
+    rdfs:comment "High distrust (threat) and retrieval of a rigid, alternative narrative."@en ;
+    neuro:involvesRegion neuro:Amygdala, neuro:DMN .

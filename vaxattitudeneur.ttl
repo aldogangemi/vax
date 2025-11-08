@@ -1,0 +1,81 @@
+@prefix : <http://www.ontologydesignpatterns.org/ont/vax-attitude.owl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vax: <http://www.ontologydesignpatterns.org/ont/vax-attitude.owl#> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix actinf: <http://www.ontologydesignpatterns.org/ont/activeinference/> .
+@prefix neuro: <http://www.ontologydesignpatterns.org/ont/neuro.owl#> .
+
+#################################################################
+#    Ontology: Vaccination Attitude Neuro Extension
+#    Imports vaxattitude.ttl and adds classes for neural correlates.
+#    Based on Polanyi b20-NEURO heuristic.
+#################################################################
+
+<http://www.ontologydesignpatterns.org/ont/vax-attitude-neuro-extension.owl>
+    rdf:type owl:Ontology ;
+    owl:imports <http://www.ontologydesignpatterns.org/ont/vax-attitude.owl> ;
+    rdfs:comment "Extends the Vax Attitude ontology to link Active Inference models to plausible neural activation patterns."@en .
+
+#################################################################
+#    New Classes
+#################################################################
+
+neuro:NeuralRegion rdf:type owl:Class ;
+    rdfs:subClassOf dul:PhysicalObject ;
+    rdfs:comment "A region of the brain, defined at a macro-scale."@en .
+
+neuro:PlausibleActivationPattern rdf:type owl:Class ;
+    rdfs:subClassOf dul:Process ;
+    rdfs:comment "A heuristic-based pattern of neural activation associated with a specific cognitive function or generative model. This is not a precise fMRI measurement, but a plausible link based on the b20-NEURO heuristic."@en .
+
+neuro:PredictionError rdf:type owl:Class ;
+    rdfs:subClassOf dul:InformationObject ;
+    rdfs:comment "The specific type of prediction error (or its affective correlate, surprise) that an agent's generative model aims to minimize."@en .
+
+#################################################################
+#    New Properties
+#################################################################
+
+vax:hasPlausibleActivation rdf:type owl:ObjectProperty ;
+    rdfs:domain actinf:GenerativeModel ;
+    rdfs:range neuro:PlausibleActivationPattern ;
+    rdfs:comment "Links an Active Inference Generative Model to a plausible pattern of neural activation required to process its frames and priors."@en .
+
+neuro:involvesRegion rdf:type owl:ObjectProperty ;
+    rdfs:domain neuro:PlausibleActivationPattern ;
+    rdfs:range neuro:NeuralRegion ;
+    rdfs:comment "Links an activation pattern to a specific neural region."@en .
+
+# We reuse actinf:hasPriorBelief and actinf:aimsToMinimize
+actinf:aimsToMinimize rdf:type owl:ObjectProperty ;
+    rdfs:range neuro:PredictionError .
+
+#################################################################
+#    Neural Region Individuals (The 'Neuro' Heuristics)
+#################################################################
+
+neuro:Amygdala rdf:type owl:NamedIndividual , neuro:NeuralRegion ;
+    rdfs:label "Amygdala"@en ;
+    rdfs:comment "Associated with threat detection, fear, and high-arousal negative emotions (e.g., emo:Fear, emo:Anger)."@en .
+
+neuro:Insula rdf:type owl:NamedIndividual , neuro:NeuralRegion ;
+    rdfs:label "Insula (Anterior)"@en ;
+    rdfs:comment "Associated with interoception, anxiety, uncertainty, and disgust/purity frames (e.g., emo:Anxiety, mor:Purity)."@en .
+
+neuro:vmPFC rdf:type owl:NamedIndividual , neuro:NeuralRegion ;
+    rdfs:label "Ventromedial Prefrontal Cortex (vmPFC)"@en ;
+    rdfs:comment "Associated with value integration, trust, moral judgment, and processing sacred values (e.g., emo:Trust, mor:Liberty)."@en .
+
+neuro:dlPFC rdf:type owl:NamedIndividual , neuro:NeuralRegion ;
+    rdfs:label "Dorsolateral Prefrontal Cortex (dlPFC)"@en ;
+    rdfs:comment "Associated with 'cold' executive function, rational planning, cognitive control, and utilitarian trade-offs (e.g., pbrs:weigh-01, mor:Utility)."@en .
+
+neuro:TPJ rdf:type owl:NamedIndividual , neuro:NeuralRegion ;
+    rdfs:label "Temporoparietal Junction (TPJ)"@en ;
+    rdfs:comment "Associated with perspective-taking and theory of mind, key for processing fairness (e.g., mor:Fairness)."@en .
+
+neuro:DMN rdf:type owl:NamedIndividual , neuro:NeuralRegion ;
+    rdfs:label "Default Mode Network (DMN)"@en ;
+    rdfs:comment "Associated with self-referential thought, narrative construction, and retrieving/maintaining rigid alternative world-models (e.g., conspiracy narratives)."@en .

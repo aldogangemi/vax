@@ -1,0 +1,289 @@
+@prefix : <http://http://www.ontologydesignpatterns.org/ont/vax-attitude.owl#/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix vax: <http://www.ontologydesignpatterns.org/ont/vax-attitude.owl#> .
+@prefix dul: <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#> .
+@prefix semio: <http://www.ontologydesignpatterns.org/cp/owl/semiotics.owl#> .
+@prefix pbrs: <https://w3id.org/framester/data/propbank-3.4.0/RoleSet/> .
+@prefix emo: <http://www.ontologydesignpatterns.org/ont/emo/> .
+@prefix mor: <http://www.ontologydesignpatterns.org/ont/mor/> .
+@prefix blend: <http://www.ontologydesignpatterns.org/ont/blending/> .
+@prefix intent: <http://www.ontologydesignpatterns.org/ont/intent/> .
+@prefix disputatio: <http://www.ontologydesignpatterns.org/ont/disputatio/> .
+@prefix persp: <http://www.ontologydesignpatterns.org/ont/persp/> .
+@prefix actinf: <http://www.ontologydesignpatterns.org/ont/activeinference/> .
+
+#################################################################
+#    Ontology: Vaccination Attitude Ontology
+#    Generated based on Polanyi analysis of vaccination clusters
+#################################################################
+
+<http://www.ontologydesignpatterns.org/ont/vax-attitude.owl/> rdf:type owl:Ontology ;
+    owl:imports <http://www.ontologydesignpatterns.org/ont/dul/DUL.owl> ;
+    rdfs:comment "An ontology modeling the five vaccination attitude clusters (Provax, Hesitant, Critical, Antivax-Libertarian, Antivax-Conspiratorial) as subclasses of dul:Situation, defined by the frames they use."@en .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###    Property to link an attitude-situation to its characterizing frames ###
+vax:usesFrame rdf:type owl:ObjectProperty ;
+    rdfs:domain vax:VaccinationAttitude ;
+    rdfs:range vax:Frame ;
+    rdfs:comment "Connects a VaccinationAttitude situation to a frame it employs."@en .
+
+vax:usesConceptualFrame rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf vax:usesFrame ;
+    rdfs:domain vax:VaccinationAttitude ;
+    rdfs:range vax:ConceptualFrame .
+
+vax:usesEmotionalFrame rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf vax:usesFrame ;
+    rdfs:domain vax:VaccinationAttitude ;
+    rdfs:range vax:EmotionalFrame .
+
+vax:usesMoralFrame rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf vax:usesFrame ;
+    rdfs:domain vax:VaccinationAttitude ;
+    rdfs:range vax:MoralFrame .
+
+vax:usesMetaphoricalFrame rdf:type owl:ObjectProperty ;
+    rdfs:subPropertyOf vax:usesFrame ;
+    rdfs:domain vax:VaccinationAttitude ;
+    rdfs:range vax:MetaphoricalFrame .
+
+###    Situational Role Properties ###
+vax:hasStanceHolder rdf:type owl:ObjectProperty ;
+    rdfs:domain vax:VaccinationAttitude ;
+    rdfs:range dul:Agent ;
+    rdfs:comment "The agent (e.g., person, author) who holds or expresses the attitude in this situation."@en .
+
+vax:directedAt rdf:type owl:ObjectProperty ;
+    rdfs:domain vax:VaccinationAttitude ;
+    rdfs:range dul:Object ;
+    rdfs:comment "The object of the attitude (e.g., the vaccine itself, a mandate, a policy)."@en .
+
+vax:expressedIn rdf:type owl:ObjectProperty ;
+    rdfs:domain vax:VaccinationAttitude ;
+    rdfs:range semio:Expression ;
+    rdfs:comment "Connects the attitude-situation to the text, video, or other expression that manifests it."@en .
+
+###    Properties to connect to other analytic modules ###
+vax:justifiedBy rdf:type owl:ObjectProperty ;
+    rdfs:domain vax:VaccinationAttitude ;
+    rdfs:range disputatio:Disputatio ;
+    rdfs:comment "Links the attitude to its characteristic argumentative structure."@en .
+
+vax:framedBy rdf:type owl:ObjectProperty ;
+    rdfs:domain vax:VaccinationAttitude ;
+    rdfs:range persp:Perspectivisation ;
+    rdfs:comment "Links the attitude to its characteristic cognitive lens."@en .
+
+vax:drivenBy rdf:type owl:ObjectProperty ;
+    rdfs:domain vax:VaccinationAttitude ;
+    rdfs:range actinf:GenerativeModel ;
+    rdfs:comment "Links the attitude to its underlying active inference generative model."@en .
+
+#################################################################
+#    Classes
+#################################################################
+
+###    Core Attitude Class (The Centre) ###
+vax:VaccinationAttitude rdf:type owl:Class ;
+    rdfs:subClassOf dul:Situation ;
+    rdfs:comment "A Situation representing a person's or text's stance on vaccination. It is defined by the frames it uses and the roles it involves."@en .
+
+###    Frame Superclasses ###
+vax:Frame rdf:type owl:Class ;
+    rdfs:comment "A superclass for conceptual, emotional, moral, or metaphorical frames."@en .
+
+vax:ConceptualFrame rdf:type owl:Class ;
+    rdfs:subClassOf vax:Frame .
+
+vax:EmotionalFrame rdf:type owl:Class ;
+    rdfs:subClassOf vax:Frame .
+
+vax:MoralFrame rdf:type owl:Class ;
+    rdfs:subClassOf vax:Frame .
+
+vax:MetaphoricalFrame rdf:type owl:Class ;
+    rdfs:subClassOf vax:Frame .
+
+###    Attitude Subclasses (The 5 Clusters) ###
+
+#    Based on the analysis in vaccinationontologybasis.txt [cite: 64]
+
+vax:ProvaxAttitude rdf:type owl:Class ;
+    rdfs:subClassOf vax:VaccinationAttitude ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesConceptualFrame ;
+          owl:someValuesFrom pbrs:recommend-01
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesConceptualFrame ;
+          owl:someValuesFrom pbrs:protect-01
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesMoralFrame ;
+          owl:someValuesFrom mor:PublicGood
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesMetaphoricalFrame ;
+          owl:someValuesFrom blend:VaccineAsShield
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesEmotionalFrame ;
+          owl:someValuesFrom emo:Trust
+        ] ;
+    rdfs:comment "Authority & Protection: Stance defined by frames of recommendation, protection, public good, and trust."@en .
+
+vax:HesitantAttitude rdf:type owl:Class ;
+    rdfs:subClassOf vax:VaccinationAttitude ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesConceptualFrame ;
+          owl:someValuesFrom pbrs:fear-01
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesConceptualFrame ;
+          owl:someValuesFrom pbrs:risk-01
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesEmotionalFrame ;
+          owl:someValuesFrom emo:Anxiety
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesMoralFrame ;
+          owl:someValuesFrom mor:Purity
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesMetaphoricalFrame ;
+          owl:someValuesFrom blend:VaccineAsUnknown
+        ] ;
+    rdfs:comment "Fear & Uncertainty: Stance defined by frames of fear, risk, anxiety, purity, and the unknown."@en .
+
+vax:CriticalAttitude rdf:type owl:Class ;
+    rdfs:subClassOf vax:VaccinationAttitude ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesConceptualFrame ;
+          owl:someValuesFrom pbrs:weigh-01
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesConceptualFrame ;
+          owl:someValuesFrom pbrs:balance-01
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesMoralFrame ;
+          owl:someValuesFrom mor:Fairness
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesEmotionalFrame ;
+          owl:someValuesFrom emo:Neutrality
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesMetaphoricalFrame ;
+          owl:someValuesFrom blend:DebateAsScale
+        ] ;
+    rdfs:comment "Balance & Utility: Stance defined by frames of weighing options, balance, fairness, and neutrality."@en .
+
+vax:AntivaxLibertarianAttitude rdf:type owl:Class ;
+    rdfs:subClassOf vax:VaccinationAttitude ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesConceptualFrame ;
+          owl:someValuesFrom pbrs:force-01
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesConceptualFrame ;
+          owl:someValuesFrom pbrs:violate-01
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesMoralFrame ;
+          owl:someValuesFrom mor:Liberty
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesMetaphoricalFrame ;
+          owl:someValuesFrom blend:MandateAsTyranny
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesEmotionalFrame ;
+          owl:someValuesFrom emo:Anger
+        ] ;
+    rdfs:comment "Liberty & Antagonism: Stance defined by frames of force, violation, liberty, and anger."@en .
+
+vax:AntivaxConspiratorialAttitude rdf:type owl:Class ;
+    rdfs:subClassOf vax:VaccinationAttitude ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesConceptualFrame ;
+          owl:someValuesFrom pbrs:lie-01
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesConceptualFrame ;
+          owl:someValuesFrom pbrs:hide-01
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesFrame ;
+          owl:someValuesFrom intent:Goal_TotalControl_1
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesMetaphoricalFrame ;
+          owl:someValuesFrom blend:VaccineAsPoison
+        ] ,
+        [ rdf:type owl:Restriction ;
+          owl:onProperty vax:usesEmotionalFrame ;
+          owl:someValuesFrom emo:Distrust
+        ] ;
+    rdfs:comment "Secrecy & Malice: Stance defined by frames of lying, hiding, secret goals, and distrust."@en .
+
+###    Disjointness Axiom ###
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( vax:ProvaxAttitude
+                vax:HesitantAttitude
+                vax:CriticalAttitude
+                vax:AntivaxLibertarianAttitude
+                vax:AntivaxConspiratorialAttitude
+              )
+] .
+
+#################################################################
+#    Individuals (The Frames)
+#    Declare all frames from the clusters as individuals
+#    so they can be used in owl:hasValue restrictions.
+#################################################################
+
+### Provax Frames ###
+pbrs:recommend-01 rdf:type owl:NamedIndividual , vax:ConceptualFrame .
+pbrs:protect-01 rdf:type owl:NamedIndividual , vax:ConceptualFrame .
+mor:PublicGood rdf:type owl:NamedIndividual , vax:MoralFrame .
+blend:VaccineAsShield rdf:type owl:NamedIndividual , vax:MetaphoricalFrame .
+emo:Trust rdf:type owl:NamedIndividual , vax:EmotionalFrame .
+
+### Hesitant Frames ###
+pbrs:fear-01 rdf:type owl:NamedIndividual , vax:ConceptualFrame .
+pbrs:risk-01 rdf:type owl:NamedIndividual , vax:ConceptualFrame .
+emo:Anxiety rdf:type owl:NamedIndividual , vax:EmotionalFrame .
+mor:Purity rdf:type owl:NamedIndividual , vax:MoralFrame .
+blend:VaccineAsUnknown rdf:type owl:NamedIndividual , vax:MetaphoricalFrame .
+
+### Critical Frames ###
+pbrs:weigh-01 rdf:type owl:NamedIndividual , vax:ConceptualFrame .
+pbrs:balance-01 rdf:type owl:NamedIndividual , vax:ConceptualFrame .
+mor:Fairness rdf:type owl:NamedIndividual , vax:MoralFrame .
+emo:Neutrality rdf:type owl:NamedIndividual , vax:EmotionalFrame .
+blend:DebateAsScale rdf:type owl:NamedIndividual , vax:MetaphoricalFrame .
+
+### Antivax-Libertarian Frames ###
+pbrs:force-01 rdf:type owl:NamedIndividual , vax:ConceptualFrame .
+pbrs:violate-01 rdf:type owl:NamedIndividual , vax:ConceptualFrame .
+mor:Liberty rdf:type owl:NamedIndividual , vax:MoralFrame .
+blend:MandateAsTyranny rdf:type owl:NamedIndividual , vax:MetaphoricalFrame .
+emo:Anger rdf:type owl:NamedIndividual , vax:EmotionalFrame .
+
+### Antivax-Conspiratorial Frames ###
+pbrs:lie-01 rdf:type owl:NamedIndividual , vax:ConceptualFrame .
+pbrs:hide-01 rdf:type owl:NamedIndividual , vax:ConceptualFrame .
+intent:Goal_TotalControl_1 rdf:type owl:NamedIndividual , vax:Frame . # Generic frame
+blend:VaccineAsPoison rdf:type owl:NamedIndividual , vax:MetaphoricalFrame .
+emo:Distrust rdf:type owl:NamedIndividual , vax:EmotionalFrame .
+
+###
